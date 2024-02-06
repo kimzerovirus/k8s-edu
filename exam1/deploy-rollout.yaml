@@ -2,8 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nginx-deployment
-  annotation:
-    - kubernetes.io/change-cause="image updated to 1.14"
+  annotations:
+    kubernetes.io/change-cause: "image updated to 1.14"
 
 spec:
   selector:
