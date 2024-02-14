@@ -1,0 +1,11 @@
+global:
+  storageClass: "local-path"
+master:
+  persistence:
+    size: 4Gi
+data:  
+  persistence:
+    size: 4Gi
+dashboards:
+  enabled: true
+  
