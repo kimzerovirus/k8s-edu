@@ -1,2 +1,2 @@
-ARGOCD_HOST: "argocd.{{ansible_host}}.sslip.io"  ## argocd server host (default=argocd.127.0.0.1.sslip.io)
+ARGOCD_HOST: "argocd.13.125.30.181.sslip.io"  ## argocd server host (default=argocd.127.0.0.1.sslip.io)
 ARGOCD_NEW_PASSWORD: "admin1234" 

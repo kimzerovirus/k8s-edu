@@ -60,7 +60,7 @@
     shell: |
       sleep 10
       PASSWORD="$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d && echo )"
-      argocd login --insecure {{ansible_host}}  --username admin  --password $PASSWORD 
+      argocd login --insecure {{ARGOCD_HOST}}  --username admin  --password $PASSWORD 
       argocd account update-password --current-password $PASSWORD  --new-password {{ARGOCD_NEW_PASSWORD}}
     tags: 
       - arogocd-pwd
