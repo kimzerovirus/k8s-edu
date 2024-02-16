@@ -1,3 +1,2 @@
-REDIS_CHART_VERSION: "17.8.2"
-REDIS_NAMESPACE: "redis-system"
-REDIS_PASSWORD: "redis1234"
+ARGOCD_HOST: "argocd.{{ansible_host}}.sslip.io"  ## argocd server host (default=argocd.127.0.0.1.sslip.io)
+ARGOCD_NEW_PASSWORD: "admin1234" 
