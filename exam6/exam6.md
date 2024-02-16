@@ -34,6 +34,29 @@ kubectl apply -f exam6/argocd-ing.yaml
 - admin/aX5yeDkjOOUdBel8
 - changepassword: admin1234
 
+## docker 설치 
+```bash
+## install-vm에서 실행 
+## ubuntu user로 실행 
+sudo apt update
+
+snap version  ## 2.61.1 되어야 한다 
+## 2.61.1 아니면 아래 실행하여 version ip 한다 
+# sudo snap refresh
+sudo snap install docker 
+
+sudo docker ps 
+
+## Docker 그룹 생성(snap docker install은 docker 그룹을 만들지 않는다)
+sudo addgroup --system docker
+
+## sudo 없이 Docker 명령 실행
+sudo usermod -a -G docker $USER
+
+## 재로그인후 체크 
+docker ps # 안될경우 sudo reboot 
+
+```
 ## docker build
 - exam6 > apps > demo
 - demo 프로젝트에서 docker build를 한다 

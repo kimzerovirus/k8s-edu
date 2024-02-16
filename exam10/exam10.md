@@ -7,8 +7,9 @@ sudo apt install -y software-properties-common
 sudo add-apt-repository --yes --update ppa:ansible/ansible
 sudo apt update
 sudo apt install ansible -y ansible
-ansible --version
+ansible --version  ## ansible core 2.15.9
 
+## ansible은 ssh 통신을 위해서 ssh public-key를  각 서버에  공유한다 
 ssh-keygen -t rsa -b 4096 
 ls ~/.ssh/
 
@@ -63,9 +64,12 @@ ansible-galaxy collection install kubernetes.core
 
 ansible-playbook -i host-vm playbook-step2.yml -t "pre,helm,step2" -e "@vars.yml"
 
-kubectl run --namespace redis redis-client --restart='Never'  --env REDIS_PASSWORD=$REDIS_PASSWORD  --image docker.io/bitnami/redis:7.0.9-debian-11-r1 --command -- sleep infinity
-
-kubectl exec --tty -i redis-client   --namespace redis -- bash
-REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli -h redis-master
+## redis master pod  접속 
+redis-cli -h redis-master
+auth redis1234
+ping
+info
+set hello vas!!
+get hello
 ```
 
