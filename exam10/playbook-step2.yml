@@ -64,7 +64,7 @@
       - step2
 
   - debug:
-    var: output
+      var: output
     tags: 
       - redis
       - step2
