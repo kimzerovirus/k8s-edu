@@ -68,13 +68,15 @@
   
   - name: application deploy
     shell: |
-      kubectl create ns vas
+      kubectl create ns {{APP_NAMESPACE}}
 
-      argocd app create vas \
+      argocd app create {{ARGO_APP_NAME}} \
       --repo {{GIT_OPS_URL}}  \
-      --revision main \
-      --path vas \
-      --dest-server https://kubernetes.default.svc \
-      --dest-namespace vas 
+      --revision {{REVISION}} \
+      --path {{GIT_OPS_PATH}} \
+      --dest-server {{DEST_SERVER}} \
+      --dest-namespace {{APP_NAMESPACE}} 
+
+      argocd app sync ${ARGO_APP_NAME}
     tags: 
       - app-deploy
