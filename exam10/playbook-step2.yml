@@ -51,6 +51,9 @@
       release_namespace: "{{REDIS_NAMESPACE}}"
       create_namespace: true
       values:
+        global:
+          redis:
+            password: "{{REDIS_PASSWORD}}"
         master:
           persistence:
             enabled: false 

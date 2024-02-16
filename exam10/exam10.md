@@ -61,7 +61,11 @@ ansible-playbook -i host-vm playbook-step1.yml -t "pre,k9s"
 ## ansible-galaxy kubernetes collection 사용하기 위해서 install-vm에 설치 한다 
 ansible-galaxy collection install kubernetes.core
 
-ansible-playbook -i host-vm playbook-step2.yml -t "pre,helm" 
-ansible-playbook -i host-vm playbook-step2.yml -t "step2" -e "@vars.yml"
+ansible-playbook -i host-vm playbook-step2.yml -t "pre,helm,step2" -e "@vars.yml"
+
+kubectl run --namespace redis redis-client --restart='Never'  --env REDIS_PASSWORD=$REDIS_PASSWORD  --image docker.io/bitnami/redis:7.0.9-debian-11-r1 --command -- sleep infinity
+
+kubectl exec --tty -i redis-client   --namespace redis -- bash
+REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli -h redis-master
 ```
 
