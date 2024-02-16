@@ -77,6 +77,6 @@
       --dest-server {{DEST_SERVER}} \
       --dest-namespace {{APP_NAMESPACE}} 
 
-      argocd app sync ${ARGO_APP_NAME}
+      argocd app sync {{ARGO_APP_NAME}}
     tags: 
       - app-deploy
