@@ -41,7 +41,7 @@ docker push [docker-hub 계정]/vas:1.0.0
 ```sh
 cd ansible
 ansible-playbook -i host-vm playbook.yml -t "argocd" 
-ansible-playbook -i host-vm playbook.yml -t "upload, argocd-ing" 
+ansible-playbook -i host-vm playbook.yml -t "arogocd-pwd" -e "@vars.yml"
 ```
 
 
