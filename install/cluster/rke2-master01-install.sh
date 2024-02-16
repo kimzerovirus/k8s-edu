@@ -17,6 +17,7 @@ cat <<EOF > /etc/rancher/rke2/config.yaml
 write-kubeconfig-mode: "0644"
 tls-san:
   - $EXTERNAL_IP
+etcd-expose-metrics: true
 EOF
 
 echo "=======rke2-server start============"

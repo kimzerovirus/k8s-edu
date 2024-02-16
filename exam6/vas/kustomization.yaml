@@ -3,6 +3,7 @@ kind: Kustomization
 resources:
 - vas-svc.yaml
 - vas-deploy.yaml
+- vas-ing.yaml
 images:
 - name: saturn203/vas
   newTag: 0.0.1
