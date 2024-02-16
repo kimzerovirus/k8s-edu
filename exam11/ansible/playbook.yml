@@ -66,10 +66,17 @@
       - arogocd-pwd
       - argocd
   
+  - name: Create a k8s namespace
+    kubernetes.core.k8s:
+      name: "{{APP_NAMESPACE}}"
+      api_version: v1
+      kind: Namespace
+      state: present
+    tags: 
+      - app-deploy
+
   - name: application deploy
     shell: |
-      kubectl create ns {{APP_NAMESPACE}}
-
       argocd app create {{ARGO_APP_NAME}} \
       --repo {{GIT_OPS_URL}}  \
       --revision {{REVISION}} \
