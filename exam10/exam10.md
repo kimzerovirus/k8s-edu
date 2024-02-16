@@ -55,6 +55,7 @@ ansible-playbook -i host-vm playbook-step1.yml -t "pre,k9s"
 
 ## anssible step2
 ```sh
+ansible-playbook -i host-vm playbook-step2.yml -t "pre" -e "@vars.yml"
 ansible-playbook -i host-vm playbook-step2.yml -t "step2" -e "@vars.yml"
 ```
 
