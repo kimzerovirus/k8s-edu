@@ -1,6 +1,7 @@
 # 1.  git clone k8s-edu
 ```bash
 ## master-1에서 실행
+## root로 실행  
 git clone https://github.com/io203/k8s-edu.git
 cd k8s-edu/lec0/single-master
 ```
@@ -10,10 +11,10 @@ cd k8s-edu/lec0/single-master
 ## 2.1 master 설치
 ```bash
 
-## ubuntu 로그인 
+## root로 실행  
 
 export EXTERNAL_IP=3.38.244.98
-sudo sh rke2-single-master-install.sh
+sh rke2-single-master-install.sh
 
 source ~/.bashrc
 

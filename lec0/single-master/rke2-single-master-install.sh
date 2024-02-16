@@ -1,19 +1,19 @@
 #!/bin/bash -x
 
-sudo swapoff -a
-sudo apt-get update -y
-sudo systemctl stop ufw && ufw disable && iptables -F
+swapoff -a
+apt-get update -y
+systemctl stop ufw && ufw disable && iptables -F
 
 echo "===========download rke2============"
-curl -sfL https://get.rke2.io | sudo  sh -
+curl -sfL https://get.rke2.io | sh -
 
-sudo systemctl enable rke2-server.service
+systemctl enable rke2-server.service
 
-sudo mkdir -p /etc/rancher/rke2/
+mkdir -p /etc/rancher/rke2/
 
 
 
-sudo cat <<EOF > /etc/rancher/rke2/config.yaml
+cat <<EOF > /etc/rancher/rke2/config.yaml
 write-kubeconfig-mode: "0644"
 tls-san:
   - $EXTERNAL_IP
@@ -21,13 +21,12 @@ etcd-expose-metrics: true
 EOF
 
 echo "=======rke2-server start============"
-sudo systemctl start rke2-server.service
+systemctl start rke2-server.service
 
 # kubeconfig
 echo "=====kubeconfig settings======="
 mkdir -p ~/.kube/
 cp /etc/rancher/rke2/rke2.yaml ~/.kube/config
-sudo cp /var/lib/rancher/rke2/bin/kubectl /usr/local/bin
 export PATH=$PATH:/var/lib/rancher/rke2/bin/
 echo 'export PATH=/usr/local/bin:/var/lib/rancher/rke2/bin:$PATH' >> ~/.bashrc
 
