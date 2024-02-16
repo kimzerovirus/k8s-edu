@@ -1,6 +1,8 @@
 
 - name: "My step2 play []"
-  hosts: master-1  ## all, 
+  hosts: all  ## all, 
+  vars_files:
+    - vars.yml
   tasks:
 
   - name: "pip 설치"
