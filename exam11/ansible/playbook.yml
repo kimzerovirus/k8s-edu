@@ -66,4 +66,15 @@
       - arogocd-pwd
       - argocd
   
-  # - name: application deploy
+  - name: application deploy
+    shell: |
+      kubectl create ns vas
+
+      argocd app create vas \
+      --repo {{GIT_OPS_URL}}  \
+      --revision main \
+      --path vas \
+      --dest-server https://kubernetes.default.svc \
+      --dest-namespace vas 
+    tags: 
+      - app-deploy
