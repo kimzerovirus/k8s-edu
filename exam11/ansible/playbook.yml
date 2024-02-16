@@ -75,7 +75,9 @@
       --revision {{REVISION}} \
       --path {{GIT_OPS_PATH}} \
       --dest-server {{DEST_SERVER}} \
-      --dest-namespace {{APP_NAMESPACE}} 
+      --dest-namespace {{APP_NAMESPACE}} \
+      --sync-policy automated \
+      --upsert
 
       argocd app sync {{ARGO_APP_NAME}}
     tags: 
