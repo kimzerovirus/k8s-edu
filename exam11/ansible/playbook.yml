@@ -3,6 +3,15 @@
   hosts: all  ## all, 
 
   tasks:
+  - name: "kubectl, kubeconfig 설정"
+    shell: |
+      mkdir -p ~/.kube/
+      cp /etc/rancher/rke2/rke2.yaml ~/.kube/config
+      sudo cp /var/lib/rancher/rke2/bin/kubectl /usr/local/bin/
+    tags: 
+      - kube-pre
+      - argocd
+      
   - name: argocd 설치
     shell: |
       kubectl create ns argocd
@@ -17,7 +26,7 @@
       var: output
     tags: 
       - argocd
-      
+
   - name: argocd-cli 설치 
     shell: |
       sudo curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64

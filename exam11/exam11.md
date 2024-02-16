@@ -38,7 +38,8 @@ docker push [docker-hub 계정]/vas:1.0.0
 ```
 
 # ansible argocd 설치 및 App 배포 
-```
+```sh
+cd ansible
 ansible-playbook -i host-vm playbook.yml -t "argocd" 
 ```
 
