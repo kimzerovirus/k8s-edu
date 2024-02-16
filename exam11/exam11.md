@@ -31,4 +31,24 @@ vi apps/demo/src/main/java/com/example/demo/controller/DemoController.java
 cd apps/demo
 docker build -t [docker-hub 계정]/vas:1.0.0 . 
 # ex} docker build -t saturn203/vas:1.0.0 . 
+docker images
+docker login 
+docker push [docker-hub 계정]/vas:1.0.0
+# ex} docker push saturn203/vas:1.0.0  
+```
+
+# ansible argocd 설치 및 App 배포 
+```
+ansible-playbook -i host-vm playbook.yml -t "argocd" 
+```
+
+
+## demo-gitOps clone (없는경우)
+```
+cd ~
+git clone https://github.com/io203/demo-gitops.git 
+
+cd demo-gitops/
+vi vas/
+
 ```

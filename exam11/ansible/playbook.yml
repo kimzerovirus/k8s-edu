@@ -1,0 +1,26 @@
+
+- name: "k8s CD 배포 "
+  hosts: all  ## all, 
+
+  tasks:
+  - name: argocd 설치
+    shell: |
+      kubectl create ns argocd
+      kubectl -n argocd apply  -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+      sleep 20
+      kubectl wait pod --timeout=-1s --for=condition=Ready -l '!job-name' -n argocd  > /dev/null
+    
+    register: output
+    tags: 
+      - argocd
+  - debug:
+      var: output
+    tags: 
+      - argocd
+      
+  - name: argocd-cli 설치 
+    shell: |
+      sudo curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+      sudo chmod +x /usr/local/bin/argocd
+    tags: 
+      - argocd-cli 
