@@ -10,17 +10,15 @@
     tags: 
     - pip
     - pre    
-  # - name: install ansible server module pre-requisites
-  #   pip:
-  #     name:
-  #       - openshift
-  #       - pyyaml
-  #       - kubernetes 
-  #       - docker
-  #       - docker-compose
-  #   tags: 
-  #     - ansible-module
-  #     - pre
+  - name: install ansible server module pre-requisites
+    pip:
+      name:
+        # - openshift
+        # - pyyaml
+        - kubernetes 
+    tags: 
+      - ansible-module
+      - pre
 
   # - name: helm3 설치
   #   shell: |
