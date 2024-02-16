@@ -12,7 +12,14 @@
       - kube-pre
       - argocd
 
-
+  - name: "[Global-pre] down 디렉토리 생성"
+    file:
+      path: "~/install"
+      state: directory
+    tags: 
+      - upload
+      - argocd
+      
   - name: files upload   
     copy:
       src: "argocd-ing.yaml"
