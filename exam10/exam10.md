@@ -40,5 +40,21 @@ ansible -i host-vm all -m ping
 ## --아래와 같이 출력되면 성공-----
 master-1 | SUCCESS => ....
 ```
-## ansible task 작성 
+## ansible task 실행하여 k9s 설치(step1)
+
+```sh
+## 먼저 설치할 master-1 서버에서  ubuntu유저에서 k9s 실행 가능 여부 
+sudo k9s
+## 있다면 k9s 삭제한다 
+sudo snap remove k9s
+
+
+## 다시 install-vm에서 ansible task 실행하여 k9s 설치한다  
+ansible-playbook -i host-vm playbook-step1.yml -t "pre,k9s"
+```
+
+## anssible step2
+```sh
+ansible-playbook -i host-vm playbook-step2.yml -t "step2" -e "@vars.yml"
+```
 
