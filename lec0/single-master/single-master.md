@@ -13,12 +13,12 @@ cd k8s-edu/lec0/single-master
 ```bash
 
 ## root로 실행  
-export EXTERNAL_IP=3.38.244.98
+export EXTERNAL_IP=3.36.65.188
 sh rke2-single-master-install.sh
 
 source ~/.bashrc
 
-kubectl get pod -A
+watch kubectl get pod -A
 
 ## ubuntu유저 kubeconfig 설정
 ## ubuntu유저로 전환후 실행
