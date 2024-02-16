@@ -3,7 +3,10 @@
 ```sh 
 ## user로 한다  
 sudo apt update
-sudo apt install ansible --yes
+sudo apt install -y software-properties-common
+sudo add-apt-repository --yes --update ppa:ansible/ansible
+sudo apt update
+sudo apt install ansible -y ansible
 ansible --version
 
 ssh-keygen -t rsa -b 4096 
@@ -55,9 +58,10 @@ ansible-playbook -i host-vm playbook-step1.yml -t "pre,k9s"
 
 ## anssible step2
 ```sh
+## ansible-galaxy kubernetes collection 사용하기 위해서 install-vm에 설치 한다 
 ansible-galaxy collection install kubernetes.core
 
-ansible-playbook -i host-vm playbook-step2.yml -t "pre" -e "@vars.yml"
+ansible-playbook -i host-vm playbook-step2.yml -t "pre,helm" 
 ansible-playbook -i host-vm playbook-step2.yml -t "step2" -e "@vars.yml"
 ```
 
