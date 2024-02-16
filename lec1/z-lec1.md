@@ -1,10 +1,12 @@
+
+
 # pod 생성
 
 ## kubectl run
 ```bash
 kubectl run my-nginx --image=nginx
 
-k delete pod/my-nginx
+kubectl delete pod/my-nginx
 ```
 
 
@@ -20,8 +22,8 @@ spec:
   containers:
     - name: nginx
       image: nginx:latest
-
 ```
+
 ```bash
 kubectl create -f pod.yaml
 kubectl apply -f pod.yaml

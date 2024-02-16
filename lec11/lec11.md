@@ -20,12 +20,22 @@ sudo usermod -a -G docker $USER
 ## 재로그인후 체크 
 docker ps # 안될경우 sudo reboot 
 ```
+
+# ansible argocd 설치 및 App 배포 (demo-gitOps/vas)
+```sh
+cd ansible
+ansible-playbook -i host-vm playbook.yml -t "app-deploy, app-deploy" -e "@vars.yml"
+```
+- https://argocd.13.125.30.181.sslip.io/ 접속한다 
+- 로그인 : admin/admin1234
+- vas app이 정상적으로 생성되었는지 확인
+- vas app 접속 : http://vas.13.125.30.181.sslip.io/
+
 # demo app 수정 
 ```sh
+## install-vm에서 실행 
 vi apps/demo/src/main/java/com/example/demo/controller/DemoController.java
-
 ## return "hello world VAS !!! version : 1.0.0 "; 에서 버전업 수정 한다 
-
 
 ## docker build 
 cd apps/demo
@@ -37,20 +47,27 @@ docker push [docker-hub 계정]/vas:1.0.0
 # ex} docker push saturn203/vas:1.0.0  
 ```
 
-# ansible argocd 설치 및 App 배포 
+## demo-gitOps image tag update 
 ```sh
-cd ansible
-ansible-playbook -i host-vm playbook.yml -t "argocd" 
-ansible-playbook -i host-vm playbook.yml -t "app-deploy" -e "@vars.yml"
-```
-
-
-## demo-gitOps clone (없는경우)
-```
+## install-vm에서 실행 
+## demo-gitOps 없는경우 아래와 같이 git clone 한다 
 cd ~
 git clone https://github.com/io203/demo-gitops.git 
 
 cd demo-gitops/
-vi vas/
+vi vas/kustomization.yaml
 
+ # newTag: 1.0.0 수정
+
+ git add . 
+ git commit -m "vas:1.0.0 수정"
+ git push origin
 ```
+
+## argocd vas app auto sync
+- argocd 기본적으로 180초(3분) 마다 refresh가 이루어져 자동 sync 된다  
+
+
+
+
+
