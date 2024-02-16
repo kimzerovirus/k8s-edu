@@ -25,8 +25,9 @@ sudo systemctl start rke2-server.service
 
 # kubeconfig
 echo "=====kubeconfig settings======="
-sudo mkdir -p ~/.kube/
+mkdir -p ~/.kube/
 cp /etc/rancher/rke2/rke2.yaml ~/.kube/config
+sudo cp /var/lib/rancher/rke2/bin/kubectl /usr/local/bin
 export PATH=$PATH:/var/lib/rancher/rke2/bin/
 echo 'export PATH=/usr/local/bin:/var/lib/rancher/rke2/bin:$PATH' >> ~/.bashrc
 
