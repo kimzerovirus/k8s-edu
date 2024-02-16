@@ -13,6 +13,8 @@
   - name: install ansible server module pre-requisites
     pip:
       name:
+        - openshift
+        - pyyaml
         - kubernetes 
     tags: 
       - ansible-module
