@@ -12,14 +12,17 @@ cd k8s-edu/lec0/single-master
 ```bash
 
 ## root로 실행  
-
 export EXTERNAL_IP=3.38.244.98
 sh rke2-single-master-install.sh
 
 source ~/.bashrc
 
+## ubuntu유저 kubeconfig 설정
+## ubuntu유저로 전환후 실행
+sh master-ubuntu-user-kubeconfig.sh
+
 ```
-~/.bashrc
+
 ## 2.2 master token  
 
 master vm에서 실행  
