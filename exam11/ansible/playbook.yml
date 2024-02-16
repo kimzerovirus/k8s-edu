@@ -11,7 +11,16 @@
     tags: 
       - kube-pre
       - argocd
-      
+
+
+  - name: files upload   
+    copy:
+      src: "argocd-ing.yaml"
+      dest:  "install"  
+    tags: 
+      - upload
+      - argocd
+
   - name: argocd 설치
     shell: |
       kubectl create ns argocd
@@ -25,6 +34,13 @@
   - debug:
       var: output
     tags: 
+      - argocd
+
+  - name: argocd 설치
+    shell: |
+      kubectl apply -f install/argocd-ing.yaml
+    tags: 
+      - argocd-ing
       - argocd
 
   - name: argocd-cli 설치 
