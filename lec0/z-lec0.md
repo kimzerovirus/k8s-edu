@@ -1,12 +1,20 @@
 
 
-# install rke2
+
+
+# 1. install rke2
 - single-master : lec0 > single-master 
 - multi-master : lec0 > multi-master 
 
-# uninstall rke2
+# [참고] uninstall rke2
 ```sh
-rke2-uninstall.sh
+sudo rke2-uninstall.sh
+```
+# 2 install-vm tools 설치 
+```sh
+## install kubectl 
+sudo apt update
+
 ```
 
 ## 2.2 k9s 설치 
