@@ -328,46 +328,51 @@ k apply -f local-path-vol-nginx.yaml
 
 ```
 
-## clear
-```
-kubectl delete -f https://raw.githubusercontent.com/rancher/local-path-provisioner/v0.0.26/deploy/local-path-storage.yaml
-```
-
-## longhorn
+## 5.2 clear
 ```sh
-## root 에서 실행 
-## jq 설치
-snap install jq
+kubectl delete -f https://raw.githubusercontent.com/rancher/local-path-provisioner/v0.0.26/deploy/local-path-storage.yaml
+k delete -f local-path-vol-nginx.yaml
+k delete pvc local-path-pvc
+```
 
-## longhorn check
+# 6.  longhorn
+```sh
+## install-vm 에서 실행 
+## sudo 에서 실행 
+## jq 설치
+sudo snap install jq
+
+## longhorn dependency package들을  check 해준다 
 curl -sSfL https://raw.githubusercontent.com/longhorn/longhorn/v1.6.0/scripts/environment_check.sh | bash
 
 
-## longhorn-iscsi  설치해 준다 
+## longhorn-iscsi  설치해 준다(default namespace 설치된다)
 kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/v1.6.0/deploy/prerequisite/longhorn-iscsi-installation.yaml
 
-
-
-## nfs client설치해 준다 
+## nfs client설치해 준다 (default namespace 설치된다)
 kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/v1.6.0/deploy/prerequisite/longhorn-nfs-installation.yaml
 
-## longhorn check
+
+## 모든 pod가 생성되면 다시 한번 longhorn check 해본다 
 curl -sSfL https://raw.githubusercontent.com/longhorn/longhorn/v1.6.0/scripts/environment_check.sh | bash
 
-## install longhorn
+## longhorn check가 모두 OK 이면 longhorn 설치할 준비가 완료 되었다 
+## 일부 [WARN]로그는 실습에서는 무시하자 
+##  install longhorn
 kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/v1.6.0/deploy/longhorn.yaml
 
-kubectl -n longhorn-system get pod
+## longhorn pod 확인
+kubectl get pod -n longhorn-system 
 
 ```
 
 ## longhorn 예제 
-```sh
-kubectl apply -f - <<EOF
+```yaml
+
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: test-longhorn-pvc
+  name: longhorn-test-pvc
 spec:
   accessModes:
     - ReadWriteOnce
@@ -375,15 +380,15 @@ spec:
   resources:
     requests:
       storage: 128Mi
-EOF
-
 ```
+
+longhorn-test-pod.yaml
 ```yaml
-kubectl apply -f - <<EOF
+
 apiVersion: v1
 kind: Pod
 metadata:
-  name: volume-test
+  name: longhorn-test-pod
 spec:
   containers:
   - name: volume-test
@@ -397,10 +402,16 @@ spec:
   volumes:
   - name: volv
     persistentVolumeClaim:
-      claimName: test-longhorn-pvc
-EOF
+      claimName: longhorn-test-pvc
+
 ```
 ```sh
+## pvc
+k apply -f longhorn-test-pvc.yaml
+## pod
+k apply -f longhorn-test-pod.yaml
+
+
 kubectl exec volume-test -- sh -c "echo ====local-path-test========== > /data/test"
 
 kubectl delete pod volume-test 
