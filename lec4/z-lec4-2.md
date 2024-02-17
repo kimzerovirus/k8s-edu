@@ -152,7 +152,7 @@ spec:
       storage: 3Gi
 ```
 ```sh
-kubectl apply -f https://k8s.io/examples/pods/storage/pv-claim.yaml
+kubectl apply -f pv-claim.yaml
 
 kubectl get pvc task-pv-claim
 kubectl get pv task-pv-volume
