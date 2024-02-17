@@ -239,7 +239,7 @@ metadata:
   name: mysql-config
   namespace: db
 data:
-  MYSQL_DATABASE: kubernetes
+  MYSQL_DATABASE: my_database
 ---
 apiVersion: v1
 kind: Secret
@@ -281,6 +281,8 @@ k create ns db
 ## namespace yaml에 설정되어 있다 
 k apply -f secret-example.yaml 
 
+## db namespace의 mysql pod로 들어간다
+
 mysql -uroot -padmin1234
 show databases;
 
@@ -288,12 +290,12 @@ show databases;
 | Database           |
 +--------------------+
 | information_schema |
-| kubernetes         |
+| my_database         |
 | mysql              |
 | performance_schema |
 | sys                |
 +--------------------+
-## "kubernetes" database 존재 확인
+## "my_database" database 존재 확인
 ```
 ## secretKeyRef 기반으로
 secret-example2.yaml
@@ -304,7 +306,7 @@ metadata:
   name: mysql-config
   namespace: db
 data:
-  MYSQL_DATABASE: kubernetes
+  MYSQL_DATABASE: my_database ## 생성할 database 
 ---
 apiVersion: v1
 kind: Secret
@@ -312,7 +314,7 @@ metadata:
   name: mysql-secret
   namespace: db
 stringData:
-  MYSQL_ROOT_PASSWORD: "admin123456"
+  MYSQL_ROOT_PASSWORD: "admin123456"   ## db 비번을 secret에 설정 
 
 ---
 apiVersion: apps/v1
