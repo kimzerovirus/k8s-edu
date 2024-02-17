@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: nginx-deployment
   annotations:
-    kubernetes.io/change-cause: "image updated to 1.14"
+    kubernetes.io/change-cause: "image updated to 1.17"
 
 spec:
   selector:
@@ -17,6 +17,6 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: nginx:1.14
+        image: nginx:1.17
         ports:
         - containerPort: 80

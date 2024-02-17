@@ -10,22 +10,59 @@
 ```sh
 sudo rke2-uninstall.sh
 ```
+
 # 2 install-vm tools 설치 
 ```sh
 ## install kubectl 
 sudo apt update
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+
+echo 'source <(kubectl completion bash)' >>~/.bashrc
+echo 'alias k=kubectl' >>~/.bashrc
+echo 'complete -F __start_kubectl k' >>~/.bashrc
+
+source ~/.bashrc
+k version
+
+## ansible은 ssh 통신을 위해서 ssh public-key를  각 서버에  공유한다 
+ssh-keygen -t rsa -b 4096 
+ls ~/.ssh/
+
+cat ~/.ssh/id_rsa.pub 
+## text 편집기에서 1줄로 정리한다 
+
+```
+## master-1 서버에서 ssh 설정 
+```sh
+## ubuntu 유저로 실행 
+## master-1 서버 접속하여 install-vm의 id_rsa.pub 값을 master-1의 authorized_keys 에 추가한다
+vi ~/.ssh/authorized_keys
+
+
+
+## kubconfig copy
+mkdir -p ~/.kube/
+scp ubuntu@172.26.13.104:~/.kube/config ~/.kube/config
+cat ~/.kube/config
+sed -i 's/127.0.0.1/172.26.13.104/g' ~/.kube/config
+cat ~/.kube/config
+
+## master-1의 6443 방화벽 open을 먼저 한다 
+k get pod -A
 
 ```
 
 ## 2.2 k9s 설치 
 ```bash
 # install k9s with snap
-snap install k9s 
-ln -s /snap/k9s/current/bin/k9s /snap/bin/
+sudo snap install k9s 
+sudo ln -s /snap/k9s/current/bin/k9s /snap/bin/
+
 ```
 
 
-# 3. 로컬에서 kubectl remote 접속 하기 
+# [참고]. 로컬에서 kubectl remote 접속 하기 
 
 ```sh
 ## master-1에서 실행 
@@ -42,11 +79,7 @@ kubectl get pod -A
 kubectl get nodes
 ```
 
-# 4 nginx 배포 
-```
-kubectl create ns nginx
-kubectl create deployment nginx --image=nginx -n nginx
-```
+
 
 
 ## 참고: tls-san 변경하거나 추가 한다면

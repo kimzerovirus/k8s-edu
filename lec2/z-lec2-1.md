@@ -1,7 +1,21 @@
-# Service
+# lecture-1
+- install-vm에서 실행 
+- ubuntu유저로  실행   
+```sh
+cd ~
+git clone https://github.com/io203/k8s-edu.git
+cd  k8s-edu/lec2
+```
+
+
+# Service 
 
 ## nginx deployment 배포 
 ```bash
+## 이전 배포 clear
+kubectl delete -f deploy.yaml
+
+## 서비스용 배포 
 kubectl apply -f deploy.yaml
 
 ```
