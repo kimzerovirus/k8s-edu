@@ -411,12 +411,15 @@ k apply -f longhorn-test-pvc.yaml
 ## pod
 k apply -f longhorn-test-pod.yaml
 
+## 볼륨에 데이터 저장
+kubectl exec longhorn-test-pod -- sh -c "echo ====local-path-test========== > /data/test.txt"
 
-kubectl exec volume-test -- sh -c "echo ====local-path-test========== > /data/test"
+## pod 삭제
+k delete pod longhorn-test-pod 
+## pod 재생성
+k apply -f longhorn-test-pod.yaml
 
-kubectl delete pod volume-test 
-
-kubectl exec volume-test -- sh -c "cat /data/test"
+kubectl exec longhorn-test-pod -- sh -c "cat /data/test.txt"
 
 ```
 ## longhorn UI
