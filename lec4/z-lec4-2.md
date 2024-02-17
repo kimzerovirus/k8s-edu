@@ -47,6 +47,9 @@ spec:
 
 k apply -f emptydir-vol.yaml
 
+## mycurlpod에서 nginx 조회 
+k exec -it mycurlpod -- curl nginx-svc
+
 ```
 
 # hostPath

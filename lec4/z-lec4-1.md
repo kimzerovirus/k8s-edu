@@ -347,9 +347,16 @@ spec:
 ```sh
 ## 기존 mysql를 삭제한다 
 k delete -f secret-example.yaml
+
 k apply -f secret-example2.yaml
 
 ## db namespace의 mysql pod로 들어가서 실행한다 
 mysql -uroot -padmin123456!
 show databases;
+```
+# clear 
+```sh
+k delete -f configmap-example.yaml -n web1
+k delete -f httpd.yaml -n web2
+k delete -f secret-example2.yaml
 ```
