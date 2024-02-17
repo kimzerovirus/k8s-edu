@@ -163,8 +163,9 @@ curl http://apache.3.35.176.30.sslip.io
 ```
 
 # 2. ConfigMap
+- configmap을 통해서 nginx index.html을 변경 테스트 
+  
 configmap-example.yaml
-
 ```yaml
 apiVersion: v1
 kind: ConfigMap
@@ -222,9 +223,11 @@ spec:
   type: ClusterIP
 ```
 ```sh
+## 기존 배포된 nginx-deployemt가 변경된다 
 k apply -f configmap-example.yaml -n web1
 
-curl https://nginx.43.202.54.233.sslip.io/
+## 기존 nginx ingress 사용, 변경된 index 페이지 노출 
+curl http://nginx.3.35.176.30.sslip.io/
 ```
 
 # secret
@@ -234,6 +237,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: mysql-config
+  namespace: db
 data:
   MYSQL_DATABASE: kubernetes
 ---
@@ -241,6 +245,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: mysql-secret
+  namespace: db
 stringData:
   MYSQL_ROOT_PASSWORD: "admin1234"
 
@@ -249,6 +254,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mysql
+  namespace: db
 spec:
   selector:
     matchLabels:
@@ -267,9 +273,12 @@ spec:
             name: mysql-config
         - secretRef:
             name: mysql-secret
-
 ```
 ```sh
+## db namespace를 생성한다 
+k create ns db
+## mysql 배포한다 
+## namespace yaml에 설정되어 있다 
 k apply -f secret-example.yaml 
 
 mysql -uroot -padmin1234
@@ -293,6 +302,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: mysql-config
+  namespace: db
 data:
   MYSQL_DATABASE: kubernetes
 ---
@@ -300,6 +310,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: mysql-secret
+  namespace: db
 stringData:
   MYSQL_ROOT_PASSWORD: "admin123456"
 
@@ -308,6 +319,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mysql
+  namespace: db
 spec:
   selector:
     matchLabels:
