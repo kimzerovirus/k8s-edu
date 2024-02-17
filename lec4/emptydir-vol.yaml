@@ -35,7 +35,7 @@ spec:
         - name: log-volume
           mountPath: /var/log/nginx
 
-      - name: aws-for-fluent-bit
+      - name: fluent-bit
         image: amazon/aws-for-fluent-bit:2.1.0
         volumeMounts:
         - name: log-volume

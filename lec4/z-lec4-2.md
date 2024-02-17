@@ -17,7 +17,7 @@ spec:
   selector:
     matchLabels:
       app: nginx
-  replicas: 2
+  replicas: 1
   template:
     metadata:
       labels:
@@ -33,7 +33,7 @@ spec:
         - name: log-volume
           mountPath: /var/log/nginx
 
-      - name: aws-for-fluent-bit
+      - name: fluent-bit
         image: amazon/aws-for-fluent-bit:2.1.0
         volumeMounts:
         - name: log-volume
@@ -47,12 +47,16 @@ spec:
 
 k apply -f emptydir-vol.yaml
 
-## mycurlpod에서 nginx 조회 
-k exec -it mycurlpod -- curl nginx-svc
+## emptyDir volume인 log-volume으로 설정해 놓았기 때문에 
+##  fluent-bit container에서 이제 nginx 의 access.log  error.log 를 읽을수 있도록 가능해 졌다 
+## nginx pod의 fluent-bit container로 접속하여 아래와 같이  nginx의 로그파일이 조회 되는지 확인한다 
+ls /var/log/nginx
 
+## clear 
+k delete -f emptydir-vol.yaml
 ```
 
-# hostPath
+# 2. hostPath
 ```yaml
 apiVersion: v1
 kind: Pod
@@ -60,8 +64,8 @@ metadata:
   name: test-webserver
 spec:
   containers:
-  - name: test-webserver
-    image: registry.k8s.io/test-webserver:latest
+  - name: test-hostpath-nginx
+    image: nginx:1.17
     volumeMounts:
     - mountPath: /var/local/aaa
       name: mydir
@@ -78,17 +82,39 @@ spec:
       path: /var/local/aaa/1.txt
       type: FileOrCreate
 ```
+```sh
+## nginx를 배포한다 
+k apply -f hostpath-vol.yaml
 
-# pv/pvc
+## pod의 디렉토리및 파일이 생성 되었는지 확인  
+k exec -it test-webserver -- ls /var/local
+k exec -it test-webserver -- ls /var/local/aaa
 
-## 노드에 index.html 파일 생성
+## 실제 pod가 배포된 node의 에서 디렉토리및 파일이 생성 되었는지 확인  
+##  pod가 배포된 노드 확인 
+k get pod test-webserver -o wide
+## node에 ubuntu로 로그인 하여 host에  생성 되었는지  조회 한다 
+ls /var/local/aaa
+
+## 다른 노드에서 확인한다 
+## ls /var/local/aaa 조회 되지 않을 것이다 
+
+## clear 
+k delete -f hostpath-vol.yaml
+```
+
+# 3. pv/pvc
+
+## 3.1  노드에 index.html 파일 생성
 ```sh
 # 사용자 노드에서 슈퍼유저로 명령을 수행하기 위하여
 # "sudo"를 사용한다고 가정한다
+## worker-1
 sudo mkdir /mnt/data
 sudo sh -c "echo 'Hello from Kubernetes storage' > /mnt/data/index.html"
 cat /mnt/data/index.html
 ```
+
 ## pv
 ```yaml
 apiVersion: v1
@@ -108,7 +134,7 @@ spec:
 
 ```
 ```sh
-kubectl apply -f https://k8s.io/examples/pods/storage/pv-volume.yaml
+kubectl apply -f task-pv-volume.yaml
 kubectl get pv task-pv-volume
 ```
 ## pvc
