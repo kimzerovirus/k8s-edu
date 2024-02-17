@@ -239,7 +239,7 @@ metadata:
   name: mysql-config
   namespace: db
 data:
-  MYSQL_DATABASE: my_database
+  MYSQL_DATABASE: my_database ## 생성할 database 
 ---
 apiVersion: v1
 kind: Secret
@@ -247,7 +247,7 @@ metadata:
   name: mysql-secret
   namespace: db
 stringData:
-  MYSQL_ROOT_PASSWORD: "admin1234"
+  MYSQL_ROOT_PASSWORD: "admin1234"  ## db 비번을 secret에 설정 
 
 ---
 apiVersion: apps/v1
@@ -281,8 +281,7 @@ k create ns db
 ## namespace yaml에 설정되어 있다 
 k apply -f secret-example.yaml 
 
-## db namespace의 mysql pod로 들어간다
-
+## db namespace의 mysql pod로 들어가서 실행한다 
 mysql -uroot -padmin1234
 show databases;
 
@@ -297,7 +296,7 @@ show databases;
 +--------------------+
 ## "my_database" database 존재 확인
 ```
-## secretKeyRef 기반으로
+## secretKeyRef 기반으로 생성 테스트 
 secret-example2.yaml
 ```yaml
 apiVersion: v1
@@ -314,7 +313,7 @@ metadata:
   name: mysql-secret
   namespace: db
 stringData:
-  MYSQL_ROOT_PASSWORD: "admin123456"   ## db 비번을 secret에 설정 
+  MYSQL_ROOT_PASSWORD: "admin123456"   ## db 비번을 다시 변경해 본다  
 
 ---
 apiVersion: apps/v1
@@ -346,9 +345,11 @@ spec:
               key: MYSQL_ROOT_PASSWORD
 ```
 ```sh
+## 기존 mysql를 삭제한다 
 k delete -f secret-example.yaml
 k apply -f secret-example2.yaml
 
+## db namespace의 mysql pod로 들어가서 실행한다 
 mysql -uroot -padmin123456!
 show databases;
 ```
