@@ -3,8 +3,8 @@
 - ubuntu유저로  실행 
   
 ```sh
-cd ~
-git clone https://github.com/io203/k8s-edu.git
+# cd ~
+# git clone https://github.com/io203/k8s-edu.git
 cd  k8s-edu/lec1
 ```
 

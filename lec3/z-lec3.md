@@ -1,19 +1,30 @@
-# ingress
+# lecture-3
+- install-vm에서 실행 
+- ubuntu유저로  실행   
+```sh
+# cd ~
+# git clone https://github.com/io203/k8s-edu.git
+cd  k8s-edu/lec3
+```
+
+# 1. ingress
 
 ## ingress controller
 nginx ingresscontroller
 ```sh
 # rke2는 기본적으로 nginx-ingressController가 설치 되어 있다 
-#kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.6.4/deploy/static/provider/cloud/deploy.yaml
+# kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.6.4/deploy/static/provider/cloud/deploy.yaml
 
 ```
 ```sh
-k get pod -n ingress-nginx
-k get svc -n ingress-nginx
+## rke2 의 ingressController 조회
+k get pod -n kube-system | grep ingress-nginx-controller
+k get svc -n kube-system | grep ingress-nginx-controller
 
 ```
-## ingress-backend
-ingress-backend.yaml
+##  ingress backend 서비스 용 nginx/apache 배포 
+
+nginx-apache.yaml
 ```yaml
 apiVersion: v1
 kind: Service
@@ -89,7 +100,8 @@ spec:
           containerPort: 80
 ```
 ```sh
-k apply -f ingress-backend.yaml
+k apply -f nginx-apache.yaml
+
 ```
 ## ingress rule
 ingress-rule.yaml

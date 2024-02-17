@@ -1,4 +1,17 @@
-# DaemonSet
+# lecture-2
+- install-vm에서 실행 
+- ubuntu유저로  실행   
+```sh
+# cd ~
+# git clone https://github.com/io203/k8s-edu.git
+cd  k8s-edu/lec2
+```
+
+
+# 1. DaemonSet
+- fluent bit은 대표적인 로그 수집기중(LogStash, fluentd, fluentbit) 가장 가볍고(다른 수집기에 비해 10배이상 가볍다)
+- 분산한경을 고려하여 만들어졌기에 최근 k8s의 로그 수집기로 각광받고 있다.
+- https://fluentbit.io/
 
 fluent-bit-daemonset.yaml
 ```yaml
@@ -33,15 +46,23 @@ spec:
           path: /var/lib/docker/containers
       
 ```
+- replicas가 없다 
+- 각 node 갯수만큼  fluent-bit이 생성된다  
+
+
 ```sh
 k apply -f fluent-bit-daemonset.yaml
+
+## daemonset 조회
 k get ds 
 
+## clear
+k delete -f fluent-bit-daemonset.yaml
 ```
 
-# StatefulSet
+# 2. StatefulSet
 nginx-statefulset.yaml
-```
+```yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -80,18 +101,22 @@ spec:
           name: web
 ```
 - 데모를 위해서 Volume 없이 생성한 예이다 
-- StatefulSet은 serviceName을 요구하며 해당 서비스는 headless 이어야 한다 
+- StatefulSet은 serviceName을 요구하며 해당 서비스는 headless (clusterIP: None) 이어야 한다 
 
 ```sh
+
 k apply -f nginx-statefulset.yaml
+
+## StatefulSet 조회
 k get sts
 
-# api및 단축키 조회
+# [참고] k8s resource api및 단축키 조회 가능한 명령어 
 k api-resources
+
 ```
 
 ## headless service 
-```
+```yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -109,7 +134,7 @@ spec:
 ```
 - headless 서비스는 `clusterIP: None` 으로 설정 하면 된다 
 
-```
+```sh
 k get svc 
 
 NAME                 TYPE           CLUSTER-IP    EXTERNAL-IP   PORT(S)        AGE
@@ -120,9 +145,12 @@ k describe svc nginx-headless-svc
 ```
 - cluster-ip에 ip가 할당 되지 않는다  
 - 따라서 다음과 같이 호출 해야 한다 
+- 
 ```sh
 
 ## mycurlpod에서 실행 
+## 없다면 아래로 실행 
+## kubectl run mycurlpod --image=curlimages/curl -i --tty -- sh
 curl nginx-headless-svc.default.svc.cluster.local
 
 nslookup nginx-headless-svc.default.svc.cluster.local
@@ -137,4 +165,9 @@ Address: 10.42.1.51
 Name:   nginx-headless-svc.default.svc.cluster.local
 Address: 10.42.1.53
 
+```
+
+## 2.1  clear 
+```sh
+k delete -f nginx-statefulset.yaml
 ```
