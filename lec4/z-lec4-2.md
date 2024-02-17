@@ -152,9 +152,11 @@ spec:
       storage: 3Gi
 ```
 ```sh
-kubectl apply -f pv-claim.yaml
+kubectl apply -f task-pv-claim.yaml
 
+## pvc 조회한다  status가 Bound 되어 있어야 한다  
 kubectl get pvc task-pv-claim
+## pv 조회한다  status가 Bound 되어 있어야 한다 
 kubectl get pv task-pv-volume
 ```
 
@@ -180,7 +182,7 @@ spec:
           name: task-pv-storage
 ```
 ```sh
-kubectl apply -f https://k8s.io/examples/pods/storage/pv-pod.yaml
+kubectl apply -f task-pv-pod.yaml
 kubectl get pod task-pv-pod
 
 kubectl exec -it task-pv-pod -- /bin/bash
