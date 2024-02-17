@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: longhorn-ui-ing
+  namespace: longhorn-system
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: "longhorn.3.35.176.30.sslip.io"
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: longhorn-frontend
+            port:
+              number: 80

@@ -427,11 +427,19 @@ kubectl exec longhorn-test-pod -- sh -c "cat /data/test.txt"
 k apply -f longhorn-test-pvc2.yaml
 k apply -f longhorn-test-nginx-deploy.yaml
 ## nginx pod 안에서 다음 실행 
+echo ====local-path-test========== > /data/test.txt
 cat /data/test.txt
+## nginx deploy 삭제 
+k delete -f longhorn-test-nginx-deploy.yaml
+## nginx 재 생성 
+k apply -f longhorn-test-nginx-deploy.yaml
+## nginx pod 안에서 체크 
+cat /data/test.txt
+
 ```
 ## longhorn UI
 ```yaml
-kubectl apply -f - <<EOF
+
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -440,7 +448,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: "longhorn.3.34.50.226.sslip.io"
+  - host: "longhorn.3.35.176.30.sslip.io"
     http:
       paths:
       - path: /
@@ -450,7 +458,10 @@ spec:
             name: longhorn-frontend
             port:
               number: 80
-EOF
+
+```
+```sh 
+k apply -f longhorn-ui-ing.yaml
 ```
 - UI 접속: http://longhorn.3.34.50.226.sslip.io
 ## longhorn uninstall
