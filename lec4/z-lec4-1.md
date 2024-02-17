@@ -343,7 +343,7 @@ spec:
               name: mysql-secret
               key: MYSQL_ROOT_PASSWORD
 ```
-```
+```sh
 k delete -f secret-example.yaml
 k apply -f secret-example2.yaml
 
