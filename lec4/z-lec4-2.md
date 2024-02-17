@@ -109,13 +109,13 @@ k delete -f hostpath-vol.yaml
 ```sh
 # 사용자 노드에서 슈퍼유저로 명령을 수행하기 위하여
 # "sudo"를 사용한다고 가정한다
-## worker-1
-sudo mkdir /mnt/data
+## worker-1 에만 생성해 본다 
+sudo mkdir -p /mnt/data
 sudo sh -c "echo 'Hello from Kubernetes storage' > /mnt/data/index.html"
 cat /mnt/data/index.html
 ```
 
-## pv
+## 3.2 pv
 ```yaml
 apiVersion: v1
 kind: PersistentVolume
@@ -137,7 +137,7 @@ spec:
 kubectl apply -f task-pv-volume.yaml
 kubectl get pv task-pv-volume
 ```
-## pvc
+## 3.3 pvc
 ```yaml
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -160,17 +160,13 @@ kubectl get pvc task-pv-claim
 kubectl get pv task-pv-volume
 ```
 
-## pod
+## 3.4 pod
 ```yaml
 apiVersion: v1
 kind: Pod
 metadata:
   name: task-pv-pod
 spec:
-  volumes:
-    - name: task-pv-storage
-      persistentVolumeClaim:
-        claimName: task-pv-claim
   containers:
     - name: task-pv-container
       image: nginx
@@ -180,27 +176,41 @@ spec:
       volumeMounts:
         - mountPath: "/usr/share/nginx/html"
           name: task-pv-storage
+   volumes:
+    - name: task-pv-storage
+      persistentVolumeClaim:
+        claimName: task-pv-claim
 ```
 ```sh
+## pod 배포
 kubectl apply -f task-pv-pod.yaml
-kubectl get pod task-pv-pod
+kubectl get pod task-pv-pod -o wide
 
+## pod 안으로 들어간다 
 kubectl exec -it task-pv-pod -- /bin/bash
 
+## 최신버전 nginx image 들은 보안 때문에 curl 이 없을수 있다 curl을 설치하자  
 apt update
 apt install curl
-curl http://localhost/
+## nginx를 조회 해 본다 
+curl http://localhost/    ## 'Hello from Kubernetes storage' 조회 안될수도 있다  
+## 파일이 존재하는지 확인 
+cat /usr/share/nginx/html/index.html
+
+## 조회 안될 경우 이는 /mnt/data/index.html 생성한 노드에 pod가 생성되지 않는 경우이다 
+## 다른 노드에도  /mnt/data/index.html를   생성해 놓으면 정상적으로 조회 된다 
+
 ```
-### clean 
+## 3.5 clean 
 ```sh
 kubectl delete pod task-pv-pod
 kubectl delete pvc task-pv-claim
 kubectl delete pv task-pv-volume
 ```
 
-# storageClass
+# 4. storageClass
 
-## nfs storageClass 예
+## 4.1 nfs storageClass ( 실습 없음)
 ```yaml
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
@@ -211,7 +221,7 @@ parameters:
   pathPattern: "${.PVC.namespace}/${.PVC.annotations.nfs.io/storage-path}" # waits for nfs.io/storage-path annotation, if not specified will accept as empty string.
   onDelete: delete
 ```
-## pvc example
+## 4.2 pvc example
 ```yaml
 kind: PersistentVolumeClaim
 apiVersion: v1
@@ -229,17 +239,21 @@ spec:
 
 ```
 
-## Rancher Local Path Provisioner
+# 5. Rancher Local-Path-Provisioner
+- local-path-storage를 지원하는 provider이다 
 
 ```sh
+## Local-Path-Provisioner 배포 
 kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/v0.0.26/deploy/local-path-storage.yaml
 
-kubectl -n local-path-storage get pod
-## log
-kubectl -n local-path-storage logs -f -l app=local-path-provisioner
+## pod 확인
+kubectl get pod -n local-path-storage 
+
+## log 확인
+kubectl logs -f -n local-path-storage  -l app=local-path-provisioner
 
 ```
-
+## 5.1  pvc 생성 
 ```yaml
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -254,7 +268,9 @@ spec:
       storage: 128Mi
 ```
 ```sh
+## 온라인 예제로 실행 
 kubectl create -f https://raw.githubusercontent.com/rancher/local-path-provisioner/master/examples/pvc/pvc.yaml
+## local-path-pvc pvc를 조회하면 status가  pending 되어 있다 pod consubmer가 생성되면 binding 된다  
 ```
 
 ```yaml
@@ -280,14 +296,16 @@ spec:
 ```sh
 kubectl create -f https://raw.githubusercontent.com/rancher/local-path-provisioner/master/examples/pod/pod.yaml
 
-kubectl get pv                
-## pvc-9875c93c-bb64-4761-b588-2b92341156af   128Mi     
-
+kubectl get pod  
+## pod가 생성되면 pvc는 pod의 요청으로 pv를  자동으로  생성되면서 먼저 pv와 Binding 되면서 pvc도 binding 된다 
 kubectl get pvc
 ## local-path-pvc   Bound    pvc-9875c93c-bb64-4761-b588-2b92341156af   128Mi 
-kubectl get pod
 
-kubectl exec volume-test -- sh -c "echo local-path-test > /data/test"
+kubectl get pv                
+## pvc-9875c93c-bb64-4761-b588-2b92341156af   128Mi   
+
+
+kubectl exec volume-test -- sh -c "echo k8s-edu-test-local-path-test > /data/test.txt"
 
 # delete pod
 kubectl delete -f https://raw.githubusercontent.com/rancher/local-path-provisioner/master/examples/pod/pod.yaml
@@ -296,7 +314,18 @@ kubectl delete -f https://raw.githubusercontent.com/rancher/local-path-provision
 kubectl create -f https://raw.githubusercontent.com/rancher/local-path-provisioner/master/examples/pod/pod.yaml
 
 # check volume content
-kubectl exec volume-test -- sh -c "cat /data/test"
+kubectl exec volume-test -- sh -c "cat /data/test.txt"
+
+## 생성된 pv에서 보면 hostPath 경로를 확인 가능(describe) 
+hostPath:   
+  path: /opt/local-path-provisioner/pvc-b728be50-6af5-4f62-b48c-8be928139647_default_local-path-pvc
+
+## worker 노드에서 test.txt 확인해 보자 (1개에서 확인 가능)
+cat /opt/local-path-provisioner/pvc-b728be50-6af5-4f62-b48c-8be928139647_default_local-path-pvc/test.txt
+
+## nginx deployment
+k apply -f local-path-vol-nginx.yaml
+
 ```
 
 ## clear
