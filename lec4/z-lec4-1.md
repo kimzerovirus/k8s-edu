@@ -52,6 +52,7 @@ spec:
         - containerPort: 80
 ```
 ```sh
+## web1 namespace에 배포 
 k apply -f nginx.yaml -n web1
 ```
 
@@ -102,9 +103,12 @@ spec:
           containerPort: 80
 ```
 ```sh
+## web2 namespace에 배포 
 k apply -f httpd.yaml -n web2
 ```
-## ingress 
+## ingress-rule
+- ingress-rule은 각 namespace에 위치 해야 한다 
+  
 web1-ing.yaml
 ```yaml
 apiVersion: networking.k8s.io/v1
@@ -114,7 +118,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: "nginx.43.202.54.233.sslip.io"
+  - host: "nginx.3.35.176.30.sslip.io"
     http:
       paths:
       - path: /
@@ -126,9 +130,10 @@ spec:
               number: 80
 ```
 ```sh
+
 k apply -f web1-ing.yaml -n web1
 
-curl http://nginx.43.202.54.233.sslip.io
+curl http://nginx.3.35.176.30.sslip.io
 ```
 
 web2-ing.yaml
@@ -140,7 +145,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: "apache.43.202.54.233.sslip.io"
+  - host: "apache.3.35.176.30.sslip.io"
     http:
       paths:
       - path: /
@@ -154,11 +159,12 @@ spec:
 ```sh
 k apply -f web2-ing.yaml -n web2
 
-curl http://apache.43.202.54.233.sslip.io
+curl http://apache.3.35.176.30.sslip.io
 ```
 
-# ConfigMap
+# 2. ConfigMap
 configmap-example.yaml
+
 ```yaml
 apiVersion: v1
 kind: ConfigMap
