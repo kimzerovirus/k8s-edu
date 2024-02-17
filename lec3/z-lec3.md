@@ -9,7 +9,7 @@ cd  k8s-edu/lec3
 
 # 1. ingress
 
-## ingress controller
+## 1.1 ingress controller
 nginx ingresscontroller
 ```sh
 # rke2는 기본적으로 nginx-ingressController가 설치 되어 있다 
@@ -22,7 +22,7 @@ k get pod -n kube-system | grep ingress-nginx-controller
 k get svc -n kube-system | grep ingress-nginx-controller
 
 ```
-##  ingress backend 서비스 용 nginx/apache 배포 
+## 1.2 ingress backend 서비스 용 nginx/apache 배포 
 
 nginx-apache.yaml
 ```yaml
@@ -100,10 +100,13 @@ spec:
           containerPort: 80
 ```
 ```sh
+## nginx/apache 배포
 k apply -f nginx-apache.yaml
 
 ```
-## ingress rule
+
+## 1.3 ingress rule
+- ingress 를 적용하면 외부에서 접속이 가능하다 
 ingress-rule.yaml
 ```yaml
 apiVersion: networking.k8s.io/v1
@@ -133,13 +136,27 @@ spec:
               number: 80
 ```
 ```sh
+
 k apply -f ingress-rule.yaml
+
 k get ingress
-curl http://43.202.54.233/nginx
-curl http://43.202.54.233/apache
+## 바로 적용 안될수 있다 조금 시간이 걸릴수 있다 
+
+
+curl http://172.26.13.104/nginx
+curl http://172.26.13.104/apache
+curl http://172.26.4.253/apache
+curl http://172.26.4.253/nginx
+curl http://172.26.5.74/apache
+curl http://172.26.5.74/nginx
+
+## external-ip로 접속이 가능해 졌다(browser로도 가능)
+## 모든 노드의 external-ip로 접속 가능(default: 80 open)  
+curl http://3.38.191.50/nginx
+curl http://3.38.191.50/apache
 
 ```
-## host 기반 
+## 1.4 host 기반으로 설정 가능하다 
 ingress-host-rule.yaml
 ```yaml
 apiVersion: networking.k8s.io/v1
@@ -149,7 +166,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: "nginx.43.202.54.233.sslip.io"
+  - host: "nginx.3.35.176.30.sslip.io"
     http:
       paths:
       - path: /
@@ -159,7 +176,7 @@ spec:
             name: nginx-svc
             port:
               number: 80
-  - host: "apache.43.202.54.233.sslip.io"
+  - host: "apache.3.35.176.30.sslip.io"
     http:
       paths:
       - path: /
@@ -170,20 +187,20 @@ spec:
             port:
               number: 80
 ```
-```
+```sh
 k apply -f ingress-host-rule.yaml
 
 k get ing
 
 curl http://nginx.43.202.54.233.sslip.io/
 curl http://apache.43.202.54.233.sslip.io/
+
 ```
 
-## TLS Termination(Self-signed)
+# 2 TLS Termination(Self-signed)
 
 ```sh
-mkdir certs
-cd certs
+
 ## 인증서를 생성
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout tls.key -out tls.crt -subj "/CN=nginxsvc/O=nginxsvc"
 
@@ -202,14 +219,13 @@ kind: Ingress
 metadata:
   name: web-ing
   # annotations:
-  #   nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-  
+  #   nginx.ingress.kubernetes.io/force-ssl-redirect: "true"  
 spec:
   ingressClassName: nginx
   tls:
   - secretName: nginx-tls-secret
   rules:
-  - host: "nginx.43.202.54.233.sslip.io"
+  - host: "nginx.3.35.176.30.sslip.io"
     http:
       paths:
       - path: /
@@ -221,16 +237,24 @@ spec:
               number: 80
 ```
 ```sh
+## ingress-rule 배포
 k apply -f ingress-tls.yaml
 # 브라우저에서 
-http://nginx.43.202.54.233.sslip.io  ## 접속안됨
+http://nginx.3.35.176.30.sslip.io  ## 접속안됨
 
-# aws lightsail의 43.202.54.233(master) 의 방화벽(network) 443 포트 추가 
-https://nginx.43.202.54.233.sslip.io 
+# aws lightsail의 master-1 의 방화벽(network) 443 포트 추가 
+https://nginx.3.35.176.30.sslip.io 
 
 ```
-## redirect http to https
+## redirect http to https(강제적)
 ```yaml
 annotations:
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+```
+
+# clear 
+```yaml
+k delete -f ingress-tls.yaml
+k delete -f nginx-apache.yaml
+
 ```

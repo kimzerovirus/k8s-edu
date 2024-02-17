@@ -1,5 +1,14 @@
-# emptyDir
+# lecture-4
+- install-vm에서 실행 
+- ubuntu유저로  실행   
+```sh
+# cd ~
+# git clone https://github.com/io203/k8s-edu.git
+cd  k8s-edu/lec4
 ```
+
+# 1. emptyDir
+```yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -16,7 +25,7 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: nginx:1.14
+        image: nginx:1.17
         ports:
         - containerPort: 80
 
@@ -33,6 +42,11 @@ spec:
       volumes: # 볼륨 선언
       - name: log-volume
         emptyDir: {}
+```
+```sh 
+
+k apply -f emptydir-vol.yaml
+
 ```
 
 # hostPath

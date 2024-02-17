@@ -151,7 +151,15 @@ k describe svc nginx-headless-svc
 ## mycurlpod에서 실행 
 ## 없다면 아래로 실행 
 ## kubectl run mycurlpod --image=curlimages/curl -i --tty -- sh
+
+## cluster내에서 호출시 다음과 같이 cluster domain을 사용할수 있다 
+## [서비스명].[네임스페이스].svc.cluster.local
+## [서비스명].[네임스페이스].svc
+## [서비스명].[네임스페이스]  ## 다른 네임스페이스
+## [서비스명] ## 같은 네임스페이스 
 curl nginx-headless-svc.default.svc.cluster.local
+curl nginx-headless-svc.default.svc
+curl nginx-headless-svc
 
 nslookup nginx-headless-svc.default.svc.cluster.local
 -----
