@@ -14,6 +14,7 @@ cd  k8s-edu/lec4
 ```sh
 k create ns web1
 ```
+
 nginx.yaml
 ```yaml
 apiVersion: v1
@@ -46,7 +47,7 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: nginx:1.14
+        image: nginx:1.17
         ports:
         - containerPort: 80
 ```
@@ -54,7 +55,7 @@ spec:
 k apply -f nginx.yaml -n web1
 ```
 
-## web2 namespace
+## 1.2 web2 namespace
 ```sh
 k create ns web2
 
@@ -184,7 +185,7 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: nginx:1.14
+        image: nginx:1.17
         ports:
         - containerPort: 80
 
