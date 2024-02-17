@@ -421,6 +421,13 @@ k apply -f longhorn-test-pod.yaml
 
 kubectl exec longhorn-test-pod -- sh -c "cat /data/test.txt"
 
+## nginx-deployment로 테스트 
+
+## ReadWriteMany 로 생성
+k apply -f longhorn-test-pvc2.yaml
+k apply -f longhorn-test-nginx-deploy.yaml
+## nginx pod 안에서 다음 실행 
+cat /data/test.txt
 ```
 ## longhorn UI
 ```yaml

@@ -23,4 +23,4 @@ spec:
       volumes:
       - name: volv
         persistentVolumeClaim:
-          claimName: longhorn-test-pvc
+          claimName: longhorn-test-pvc2
