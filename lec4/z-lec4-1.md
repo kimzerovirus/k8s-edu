@@ -1,4 +1,4 @@
-# lecture-4
+# lecture-4-1
 - install-vm에서 실행 
 - ubuntu유저로  실행   
 ```sh

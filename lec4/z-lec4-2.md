@@ -1,4 +1,4 @@
-# lecture-4
+# lecture-4-2
 - install-vm에서 실행 
 - ubuntu유저로  실행   
 ```sh
@@ -366,7 +366,7 @@ kubectl get pod -n longhorn-system
 
 ```
 
-## longhorn 예제 
+## 6.1  longhorn 예제 
 ```yaml
 
 apiVersion: v1
@@ -437,7 +437,7 @@ k apply -f longhorn-test-nginx-deploy.yaml
 cat /data/test.txt
 
 ```
-## longhorn UI
+## 6.2 longhorn UI
 ```yaml
 
 apiVersion: networking.k8s.io/v1
@@ -463,22 +463,39 @@ spec:
 ```sh 
 k apply -f longhorn-ui-ing.yaml
 ```
-- UI 접속: http://longhorn.3.34.50.226.sslip.io
-## longhorn uninstall
+- UI 접속: http://longhorn.3.35.176.30.sslip.io
+
+## 6.3  app delete 
 ```sh
-## Please set it to `true` using Longhorn UI or kubectl -n longhorn-system edit settings.longhorn.io deleting-confirmation-flag 
-## ui에서 Deleting Confirmation Flag: 체크박스 체크 한다
+k delete -f longhorn-test-pod.yaml
+k delete -f longhorn-test-nginx-deploy.yaml
 
+## 강제 삭제시 
+k delete pod nginx-vol-deployment-578bbd869f-x89lp --grace-period=0 --force
+```
+## 6.4 longhorn uninstall
+```sh 
+## [주의] longhorn 삭제 하려면  ui의 삭제 설정해줘야 한다 
+## 상단메뉴 :  Setting 클릭 >  Deleting Confirmation Flag: 체크박스를 체크 한다 >  맨 하단의 save 버튼 클릭( 화면이동 없음)
 
+## longhorn를 삭제하기위한 uninstall pod를 생성
 kubectl create -f https://raw.githubusercontent.com/longhorn/longhorn/v1.6.0/uninstall/uninstall.yaml
 kubectl get job/longhorn-uninstall -n longhorn-system -w
 
+## long-ui 및 부가적인 것들 삭제하기 위해서 실행 
 kubectl delete -f https://raw.githubusercontent.com/longhorn/longhorn/v1.6.0/deploy/longhorn.yaml
+## longhorn-iscsi 삭제
+kubectl delete -f https://raw.githubusercontent.com/longhorn/longhorn/v1.6.0/deploy/prerequisite/longhorn-iscsi-installation.yaml
+## longhorn-nfs 삭제
+kubectl delete -f https://raw.githubusercontent.com/longhorn/longhorn/v1.6.0/deploy/prerequisite/longhorn-nfs-installation.yaml
+## uninstall job도 삭제
 kubectl delete -f https://raw.githubusercontent.com/longhorn/longhorn/v1.6.0/uninstall/uninstall.yaml
+
+
 ```
 
 
-# Request / Limit
+# 7. POD 의 Request / Limit
 
 ```yaml
 apiVersion: v1
@@ -509,23 +526,24 @@ spec:
 
 ```
 
-# ETCD 
+# 8. ETCD 
 ```sh
-kubectl -n kube-system exec -it etcd-ip-172-26-15-174 -- /bin/bash
+kubectl -n kube-system exec -it etcd-ip-172-26-13-104 -- /bin/bash
 
 etcd --version
 etcdctl version
 
+## 환경변수 설정 
 export ETCDCTL_ENDPOINTS='https://127.0.0.1:2379' 
 export ETCDCTL_CACERT='/var/lib/rancher/rke2/server/tls/etcd/server-ca.crt' 
 export ETCDCTL_CERT='/var/lib/rancher/rke2/server/tls/etcd/server-client.crt' 
 export ETCDCTL_KEY='/var/lib/rancher/rke2/server/tls/etcd/server-client.key' 
 export ETCDCTL_API=3 
 
-
-
-etcdctl member list
-etcdctl endpoint status --cluster -w table
+## health 
 etcdctl endpoint health
-
+## etcd member 리스트 
+etcdctl member list
+## endpoint status 조회
+etcdctl endpoint status --cluster -w table
 ```

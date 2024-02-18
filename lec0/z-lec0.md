@@ -85,7 +85,7 @@ kubectl get nodes
 ## 참고: tls-san 변경하거나 추가 한다면
 ```bash
 # 수정한다 
-vi  /etc/rancher/rke2/config.yaml
+sudo vi  /etc/rancher/rke2/config.yaml
 
 # 재 시작해 주면 된다 
 sudo systemctl restart rke2-server.service

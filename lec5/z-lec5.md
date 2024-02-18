@@ -1,12 +1,20 @@
-
-## install helm
+# lecture-5
+- install-vm에서 실행 
+- ubuntu유저로  실행   
+```sh
+# cd ~
+# git clone https://github.com/io203/k8s-edu.git
+cd  k8s-edu/lec5
 ```
-snap install helm --classic
+## 1. install helm
+```sh
+## install-vm에서 실행 
+sudo snap install helm --classic
 
 helm version
 ```
 
-## rke2 port 확인 
+## 1.1 rke2 etcd-expose-metrics 확인 
 - https://docs.rke2.io/install/requirements
 - rke2는 기본적으로 etcd-expose-metrics: false로 되어 있다 
 - 따라서 이를 true로 변경 해야 한다 rke2 설치시 /etc/rancher/rke2/config.yaml 에 추가 한다 
@@ -20,17 +28,19 @@ EOF
 ```
 - rke2 설치후 중간에 설정시 /etc/rancher/rke2/config.yaml 추가후 다음과 같이 재 실행 한다 
 ```sh
-sudo systemctl restart rke2-server.service
+# sudo systemctl restart rke2-server.service
 
 ```
 
-## install promethues-stack
+## 1.3 install promethues-stack
 - kube-prometheus-stack으로 설치시 promethus,grafana,node-exporter가 패키지로 설치됨
 ```sh
 kubectl create ns monitoring
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
 ```
+
+
 custom-values.yaml
 ```yaml
 kubeControllerManager:  
@@ -45,12 +55,16 @@ kubeScheduler:
     targetPort: 10250
 ```
 - rke2는  kubelet metric port 10250이다 
+
 ```sh
 helm install prometheus prometheus-community/kube-prometheus-stack  -f prometheus-custom-values.yaml -n monitoring
 ```
-## access port
+
+
+## 1.4 access port
 - prometheus-kube-prometheus-prometheus  9090
 - prometheus-grafana 80
+  
 prometheus-ing.yaml
 ```yaml
 apiVersion: networking.k8s.io/v1
@@ -61,7 +75,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: "prometheus.3.34.196.90.sslip.io"
+  - host: "prometheus.13.124.108.45.sslip.io"
     http:
       paths:
       - path: /
@@ -83,7 +97,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: "grafana.3.34.196.90.sslip.io"
+  - host: "grafana.13.124.108.45.sslip.io"
     http:
       paths:
       - path: /
@@ -94,27 +108,37 @@ spec:
             port:
               number: 80
 ```
-## prometheus > status > targets 체크 
--  prometheus ui > status
--  http://prometheus.3.34.196.90.sslip.io
--  모두 UP 상태가 되어야 한다 
-  
-## grafana UI
-- http://grafana.3.34.196.90.sslip.io
-- admin/prom-operator
-- datasource 및 dashboard가 이미 설정및 설치 되어 있다 
 
-## clear
-```bash
-helm uninstall prometheus -n monitoring
+```sh 
+## ingress-rule 적용
+k apply -f prometheus-ing.yaml
+k apply -f grafana-ing.yaml
 ```
 
-# opensearch
+## 1.5 prometheus > status > targets 체크 
+-  prometheus ui > status
+-  http://prometheus.13.124.108.45.sslip.io
+-  모두 UP 상태가 되어야 한다 
+  
+## 1.6 grafana UI
+- http://grafana.13.124.108.45.sslip.io
+- 로그인: admin/prom-operator
+- datasource 및 dashboard가 이미 설정및 설치 되어 있다 
 
-## worker 3개 필요 
+## 1.7 clear
+```bash
+## prometheus-stack 삭제
+helm uninstall prometheus -n monitoring
+
+```
+
+# 2. opensearch
+
+## 2.1 worker 3개 필요 
 - opensearch 설치 하기 위해서 최소한 worker가 3개 필요하다 
+- worker를 하나 만들고 lec0에서 했던 agent를 추가 한다 
 
-## pv 때문에 설치(Rancher Local Path Provisioner)
+##  opensearch는 pv가 필요하며  pv 때문에 설치(Rancher Local Path Provisioner)
 ```sh
 kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/v0.0.26/deploy/local-path-storage.yaml
 
@@ -140,7 +164,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: "dashboard.3.34.196.90.sslip.io"
+  - host: "dashboard.13.124.108.45.sslip.io"
     http:
       paths:
       - path: /
@@ -152,15 +176,20 @@ spec:
               number: 5601
 
 ```
+```sh
+## opensearch dashboard ingress 적용
+k apply -f dashboard-ing.yaml
+
+```
 
 ## sidecar log 수집
 ```sh
 kubectl create ns nginx
-kubectl apply -f exam5/sidcar-nginx-log.yaml
+kubectl apply -f sidecar-nginx-log.yaml
 
 ```
 - nginx ui 접속
-- http://nginx.3.34.196.90.sslip.io/
+- http://nginx.13.124.108.45.sslip.io/
 
 ## opensearch dashboard에서 확인 
 - index management > Indices >  server-nginx-log-* 확인
