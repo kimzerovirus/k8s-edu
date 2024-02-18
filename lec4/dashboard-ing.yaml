@@ -6,7 +6,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: "dashboard.13.124.108.45.sslip.io"
+  - host: "dashboard.43.202.56.65.sslip.io"
     http:
       paths:
       - path: /

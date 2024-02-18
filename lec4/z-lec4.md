@@ -75,7 +75,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: "prometheus.13.124.108.45.sslip.io"
+  - host: "prometheus.43.202.56.65.sslip.io"
     http:
       paths:
       - path: /
@@ -97,7 +97,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: "grafana.13.124.108.45.sslip.io"
+  - host: "grafana.43.202.56.65.sslip.io"
     http:
       paths:
       - path: /
@@ -117,11 +117,11 @@ k apply -f grafana-ing.yaml
 
 ## 1.5 prometheus > status > targets 체크 
 -  prometheus ui > status
--  http://prometheus.13.124.108.45.sslip.io
+-  http://prometheus.43.202.56.65.sslip.io
 -  모두 UP 상태가 되어야 한다 
   
 ## 1.6 grafana UI
-- http://grafana.13.124.108.45.sslip.io
+- http://grafana.43.202.56.65.sslip.io
 - 로그인: admin/prom-operator
 - datasource 및 dashboard가 이미 설정및 설치 되어 있다 
 
@@ -150,6 +150,7 @@ kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisione
 kubectl create ns monitoring
 helm repo add bitnami https://charts.bitnami.com/bitnami
 helm repo update
+helm search repo bitnami/opensearch -l
 
 helm install opensearch bitnami/opensearch --version 0.6.1 -f opensearch-custom-values.yaml -n monitoring 
  
@@ -167,7 +168,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: "dashboard.13.124.108.45.sslip.io"
+  - host: "dashboard.43.202.56.65.sslip.io"
     http:
       paths:
       - path: /
@@ -192,7 +193,7 @@ kubectl apply -f sidecar-nginx-log.yaml
 
 ```
 - nginx ui 접속
-- http://nginx.13.124.108.45.sslip.io/
+- http://nginx.43.202.56.65.sslip.io/
 
 ## opensearch dashboard에서 확인 
 - index management > Indices >  server-nginx-log-* 확인
