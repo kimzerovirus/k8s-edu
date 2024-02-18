@@ -35,20 +35,20 @@ kubectl apply -f rke2-ingress-nginx.yaml
 ```
 - 1개씩 update 가 된다 (완료 될때 까지 기다린다)
 
-## lightsail master 서버 443 오픈 
+## 2.2 lightsail master 서버 443 오픈 
 - master-1 서버의 network에서 443 추가 
   
 argocd-ingress
 ```sh
 kubectl apply -f argocd-ing.yaml
 ```
-### access argocd ui
+### 2.3 access argocd ui
 - https://argocd.43.202.56.65.sslip.io/
 - admin/mB5LvCcBW53I2I4G
 - changepassword: admin1234
 - 재로그인 
 
-## docker 설치 
+# 3. docker 설치 
 ```bash
 ## install-vm에서 실행 
 ## ubuntu user로 실행 
@@ -87,7 +87,7 @@ docker push saturn203/vas:0.0.1
 ```
 - docker-hub에서 push 사항을  확인한다 
 
-## demo-gitops 
+# 4. demo-gitops 
 - 각자 개인 github 에서 demo-gitops 를 public으로 생성한다 
 - 생성된 demo-gitops 를 클론 한다 
 ```sh
@@ -97,12 +97,19 @@ git clone [repository-uri]
 
 ## lec6 > vas 폴더를 vas-gitops 안에 copy 한다 
 ## vas-ing.yaml host를 변경한다 
- cp -rf ~/k8s-edu/lec6/vas ~/demo-gitops/
- cd ~/demo-gitops
- git push origin main
+cp -rf ~/k8s-edu/lec6/vas ~/demo-gitops/
+cd ~/demo-gitops
+git config --global --edit   ## 자신의 유저명, 메일로 작성 
+git commit --amend --reset-author ## 수정없이 그냥 나간다 
+
+git push origin main
+## github login 
+## password : 개인 github >  Settings > Developer Settings > Personal access tokens > Tokens(classic) >  Generate new token >  token값
+
+
 ```
 
-## argocd git repository 설정 
+# 5.  argocd git repository 설정 
 - argocd 홈  >  Settings > Repositories > connect REPO
 - VIA HTTPS 선택 
 - type: git
@@ -111,12 +118,12 @@ git clone [repository-uri]
 - Username :  각 개인 계정 
 - Password :  개인 github >  Settings > Developer Settings > Personal access tokens > Tokens(classic) >  Generate new token >  token값
 
-## vas namespace 생성 
-```
+# 6. vas namespace 생성 
+```sh
 kubectl create ns vas 
 ```
 
-## argocd applications
+# 7.  argocd applications
 - Applications > NEW APP
 - Name: vas
 - Project Name: default
@@ -129,10 +136,15 @@ kubectl create ns vas
 - 위의 CREATE 버튼 클릭
 - SYNC 버튼 클릭 >  SYNCRONIZE
 
-## vas 서비스 확인 
+## 7.1 vas 서비스 확인 
 - http://vas.43.202.56.65.sslip.io/
 
-## clear
-```
+# 8. clear
+```sh
+## arog UI 에서 vas application delete 한다  
 kubectl delete -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+
+cd ~/k8s-edu/lec6
+k delete -f argocd-ing.yaml
+
 ```

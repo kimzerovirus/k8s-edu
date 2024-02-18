@@ -238,6 +238,7 @@ k delete pvc data-opensearch-data-0 -n monitoring
 k delete pvc data-opensearch-data-1 -n monitoring 
 k delete pvc data-opensearch-master-0 -n monitoring 
 k delete pvc data-opensearch-master-1 -n monitoring 
+k delete -f dashboard-ing.yaml
 k delete -f nginx.yaml
 
 

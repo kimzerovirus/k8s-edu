@@ -1,5 +1,15 @@
+# lecture-9
+- install-vm에서 실행 
+- ubuntu유저로  실행   
+```sh
+# cd ~
+# git clone https://github.com/io203/k8s-edu.git
+cd  ~/k8s-edu/lec9
 
-# Account
+```
+
+
+# 1.  Account
 kubecofnig file
 
 ```sh
@@ -8,14 +18,16 @@ kubectl config view
 - context 정보
 - user 정보(default)가 있다 이를 default2로 변경해도 무방하다 
   
-
+## 1.1 Serviceaccount 접근(추천)
 ```sh
 ## namespace 생성
 kubectl create ns demo
 k get sa -n demo
+
 ## serciceAccount 생성
 kubectl create sa demo-sa -n demo
 k get sa -n demo
+
 ## Token 생성
 ## 1.24 버전부터 sa 를 생성해도 token이 자동으로 생성되지 않는다. 따라서 수동으로 생성해준다 
 kubectl apply -f demo-secret.yaml
@@ -53,7 +65,6 @@ current-context: default
 kind: Config
 preferences: {}
 users:
-users:
 - name: demo-user
   user:
     token: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -74,6 +85,8 @@ k delete -f demo-rolebinding.yaml
 k delete -f demo-role.yaml
 k delete  secret/demo-sa -n demo
 k delete sa demo-sa -n demo
+k delete -f nginx.yaml -n demo
+
 ```
 
 

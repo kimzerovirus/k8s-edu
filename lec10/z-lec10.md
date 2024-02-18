@@ -1,4 +1,15 @@
-# install ansible
+# lecture-10
+- install-vm에서 실행 
+- ubuntu유저로  실행   
+```sh
+# cd ~
+# git clone https://github.com/io203/k8s-edu.git
+cd  ~/k8s-edu/lec10
+
+```
+
+
+# 1. install ansible
 - install-vm 에서 실행
 ```sh 
 ## user로 한다  
@@ -17,7 +28,7 @@ cat ~/.ssh/id_rsa.pub
 ## text 편집기에서 1줄로 정리한다 
 
 ```
-## master-1 서버에서 ssh 설정 
+## 1.1 master-1 서버에서 ssh 설정 
 ```sh
 ## ubuntu 유저로 실행 
 ## master-1 서버 접속하여 install-vm의 id_rsa.pub 값을 master-1의 authorized_keys 에 추가한다
@@ -31,7 +42,7 @@ ubuntu ALL=(ALL) NOPASSWD: ALL
 
 ```
 
-## install-vm에서  ansible ping test
+## 1.2 install-vm에서  ansible ping test
 vi host-vm
 ```sh
 master-1 ansible_host=172.26.12.109 ansible_user=ubuntu ansible_port=22 ansible_ssh_private_key_file=~/.ssh/id_rsa
@@ -44,11 +55,11 @@ ansible -i host-vm all -m ping
 ## --아래와 같이 출력되면 성공-----
 master-1 | SUCCESS => ....
 ```
-## ansible task 실행하여 k9s 설치(step1)
+## 1.3 ansible task 실행하여 k9s 설치(step1)
 
 ```sh
 ## 먼저 설치할 master-1 서버에서  ubuntu유저에서 k9s 실행 가능 여부 
-sudo k9s
+k9s
 ## 있다면 k9s 삭제한다 
 sudo snap remove k9s
 
@@ -57,19 +68,27 @@ sudo snap remove k9s
 ansible-playbook -i host-vm playbook-step1.yml -t "pre,k9s"
 ```
 
-## anssible step2
+## 1.4 anssible step2( redis master/salve 설치)
 ```sh
 ## ansible-galaxy kubernetes collection 사용하기 위해서 install-vm에 설치 한다 
 ansible-galaxy collection install kubernetes.core
 
 ansible-playbook -i host-vm playbook-step2.yml -t "pre,helm,step2" -e "@vars.yml"
+## 정상으로 설치되면 redis-master-0, redis-replicas-0, redis-replicas-1, redis-replicas-2 생성 되어야 한다 
 
-## redis master pod  접속 
+## k9s 에서 redis master-pod  접속 
 redis-cli -h redis-master
 auth redis1234
 ping
 info
 set hello vas!!
 get hello
+```
+
+# 2. Clear 
+```sh
+helm ls -n redis-system
+helm uninstall redis -n redis-system
+
 ```
 

@@ -1,4 +1,15 @@
-# docker install(없다면 )
+# lecture-11
+- install-vm에서 실행 
+- ubuntu유저로  실행   
+```sh
+# cd ~
+# git clone https://github.com/io203/k8s-edu.git
+cd  ~/k8s-edu/lec11
+
+```
+
+
+# 1. docker install(없다면 )
 ```sh
 ## install-vm에서 실행 
 ## ubuntu user로 실행 
@@ -21,15 +32,21 @@ sudo usermod -a -G docker $USER
 docker ps # 안될경우 sudo reboot 
 ```
 
-# ansible argocd 설치 및 App 배포 (demo-gitOps/vas)
+# 2. ansible argocd 설치 및 App 배포 (demo-gitOps/vas)
 ```sh
 cd ansible
+## host-vm host 수정 
+## argode-ing  host 수정 
+## vars.yaml master-host 및 gitOps 변경
+
+ansible -i host-vm all -m ping
+
 ansible-playbook -i host-vm playbook.yml -t "app-deploy, app-deploy" -e "@vars.yml"
 ```
-- https://argocd.13.125.30.181.sslip.io/ 접속한다 
+- https://argocd.43.202.56.65.sslip.io/ 접속한다 
 - 로그인 : admin/admin1234
 - vas app이 정상적으로 생성되었는지 확인
-- vas app 접속 : http://vas.13.125.30.181.sslip.io/
+- vas app 접속 : http://vas.43.202.56.65.sslip.io/
 
 # demo app 수정 
 ```sh
