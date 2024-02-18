@@ -43,9 +43,10 @@ argocd-ingress
 kubectl apply -f argocd-ing.yaml
 ```
 ### access argocd ui
-- https://argocd.15.165.75.251.sslip.io/
-- admin/aX5yeDkjOOUdBel8
+- https://argocd.43.202.56.65.sslip.io/
+- admin/mB5LvCcBW53I2I4G
 - changepassword: admin1234
+- 재로그인 
 
 ## docker 설치 
 ```bash
@@ -129,7 +130,7 @@ kubectl create ns vas
 - SYNC 버튼 클릭 >  SYNCRONIZE
 
 ## vas 서비스 확인 
-- http://vas.15.165.75.251.sslip.io/
+- http://vas.43.202.56.65.sslip.io/
 
 ## clear
 ```

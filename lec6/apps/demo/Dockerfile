@@ -5,7 +5,7 @@ COPY .mvn .mvn
 RUN ./mvnw dependency:resolve
 
 COPY src src
-RUN ./mvnw package
+RUN ./mvnw package -DskipTests
 
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR apps

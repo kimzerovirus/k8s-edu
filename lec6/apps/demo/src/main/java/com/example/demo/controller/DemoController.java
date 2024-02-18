@@ -10,7 +10,7 @@ public class DemoController {
 
     @GetMapping("/")
     public String home(){
-        return "hello world VAS !!!";
+        return "hello world VAS !!! version: 0.0.1 ";
     }
     
 }
