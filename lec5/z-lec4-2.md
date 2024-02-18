@@ -1,10 +1,10 @@
-# lecture-4-2
+# lecture-5-2
 - install-vm에서 실행 
 - ubuntu유저로  실행   
 ```sh
 # cd ~
 # git clone https://github.com/io203/k8s-edu.git
-cd  k8s-edu/lec4
+cd  k8s-edu/lec5
 ```
 
 # 1. emptyDir

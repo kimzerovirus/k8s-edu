@@ -40,12 +40,13 @@ cat ~/.ssh/id_rsa.pub
 vi ~/.ssh/authorized_keys
 
 
-
+## install-vm에서 
 ## kubconfig copy
 mkdir -p ~/.kube/
-scp ubuntu@172.26.13.104:~/.kube/config ~/.kube/config
+scp ubuntu@172.26.11.45:~/.kube/config ~/.kube/config
 cat ~/.kube/config
-sed -i 's/127.0.0.1/172.26.13.104/g' ~/.kube/config
+
+sed -i 's/127.0.0.1/172.26.11.45/g' ~/.kube/config
 cat ~/.kube/config
 
 ## master-1의 6443 방화벽 open을 먼저 한다 

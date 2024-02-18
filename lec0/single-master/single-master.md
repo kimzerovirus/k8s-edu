@@ -13,7 +13,7 @@ cd k8s-edu/lec0/single-master
 ```bash
 
 ## root로 실행  
-export EXTERNAL_IP=3.35.176.30
+export EXTERNAL_IP=43.202.56.65
 sh rke2-single-master-install.sh
 
 source ~/.bashrc
@@ -38,7 +38,7 @@ master vm에서 실행
 ```sh
 sudo cat /var/lib/rancher/rke2/server/node-token
 
-K10586ce7eb6dee93b23e289016851ad469feed3d1d1a5e62b920757f1b70829b3c::server:2ba5352b2b39f07426f32886111d805f
+K10b52b0ae838b90a36a1bfc883d0e59856a61f76083fdb3edb5ba471fd5ebaa3e4::server:575a91e6af6c787ed8dff2d049aa254a
 
 ```
 
@@ -51,8 +51,8 @@ git clone https://github.com/io203/k8s-edu.git
 cd k8s-edu/lec0/single-master
 
 ## master의 private IP를 입력 해야 함 
-export MASTER01_INTERNAL_IP=172.26.13.104
-export TOKEN=K10586ce7eb6dee93b23e289016851ad469feed3d1d1a5e62b920757f1b70829b3c::server:2ba5352b2b39f07426f32886111d805f
+export MASTER01_INTERNAL_IP=172.26.11.45
+export TOKEN=K10b52b0ae838b90a36a1bfc883d0e59856a61f76083fdb3edb5ba471fd5ebaa3e4::server:575a91e6af6c787ed8dff2d049aa254a
 sh rke2-single-agent-install.sh
 
 ```

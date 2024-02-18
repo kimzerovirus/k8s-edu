@@ -1,10 +1,10 @@
-# lecture-5
+# lecture-4
 - install-vm에서 실행 
 - ubuntu유저로  실행   
 ```sh
 # cd ~
 # git clone https://github.com/io203/k8s-edu.git
-cd  k8s-edu/lec5
+cd  k8s-edu/lec4
 ```
 ## 1. install helm
 ```sh
@@ -145,10 +145,13 @@ kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisione
 ```
 
 ```sh
+#  sysctl -w vm.max_map_count=262144 && sysctl -w fs.file-max=65536
+
 kubectl create ns monitoring
 helm repo add bitnami https://charts.bitnami.com/bitnami
 helm repo update
-helm install opensearch bitnami/opensearch -f opensearch-custom-values.yaml -n monitoring 
+
+helm install opensearch bitnami/opensearch --version 0.6.1 -f opensearch-custom-values.yaml -n monitoring 
  
 ```
 - running 할때까지 시간이 걸림
@@ -222,6 +225,9 @@ helm uninstall opensearch -n monitoring
 helm uninstall fluent-bit -n monitoring
 ## pvc 를 강제적으로 삭제한다 
 kubectl get pvc -n monitoring 
-
+k delete pvc data-opensearch-data-0 -n monitoring 
+k delete pvc data-opensearch-data-1 -n monitoring 
+k delete pvc data-opensearch-master-0 -n monitoring 
+k delete pvc data-opensearch-master-1 -n monitoring 
 kubectl delete -f exam5/nginx.yaml
 ```
