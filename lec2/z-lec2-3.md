@@ -16,6 +16,6 @@ cd  k8s-edu/lec2
 
 ## 어플리케이션 apache 배포
 ```sh 
-k apply -f hpa-apache.yaml
+k apply -f apache.yaml
 
 ```
