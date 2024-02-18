@@ -258,3 +258,5 @@ k delete -f ingress-tls.yaml
 k delete -f nginx-apache.yaml
 
 ```
+
+

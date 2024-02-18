@@ -39,9 +39,11 @@ cd ansible
 ## argode-ing  host 수정 
 ## vars.yaml master-host 및 gitOps 변경
 
+## ping test
 ansible -i host-vm all -m ping
 
-ansible-playbook -i host-vm playbook.yml -t "app-deploy, app-deploy" -e "@vars.yml"
+ansible-playbook -i host-vm playbook.yml -t "argocd, app-deploy" -e "@vars.yml"
+
 ```
 - https://argocd.43.202.56.65.sslip.io/ 접속한다 
 - 로그인 : admin/admin1234
@@ -51,11 +53,13 @@ ansible-playbook -i host-vm playbook.yml -t "app-deploy, app-deploy" -e "@vars.y
 # demo app 수정 
 ```sh
 ## install-vm에서 실행 
-vi apps/demo/src/main/java/com/example/demo/controller/DemoController.java
-## return "hello world VAS !!! version : 1.0.0 "; 에서 버전업 수정 한다 
+cd ~/k8s-edu/lec11/apps/demo
+cat ~/k8s-edu/lec11/apps/demo/src/main/java/com/example/demo/controller/DemoController.java
+## return "hello world VAS !!! version : 1.0.0 "; 에서 소스 수정해 놓았다
+## 변경하고 싶다면 
+# vi ~/k8s-edu/lec11/apps/demo/src/main/java/com/example/demo/controller/DemoController.java
 
 ## docker build 
-cd apps/demo
 docker build -t [docker-hub 계정]/vas:1.0.0 . 
 # ex} docker build -t saturn203/vas:1.0.0 . 
 docker images
@@ -68,21 +72,21 @@ docker push [docker-hub 계정]/vas:1.0.0
 ```sh
 ## install-vm에서 실행 
 ## demo-gitOps 없는경우 아래와 같이 git clone 한다 
-cd ~
-git clone https://github.com/io203/demo-gitops.git 
+# cd ~
+# git clone https://github.com/io203/demo-gitops.git 
 
-cd demo-gitops/
+cd ~/demo-gitops/
 vi vas/kustomization.yaml
 
  # newTag: 1.0.0 수정
 
- git add . 
- git commit -m "vas:1.0.0 수정"
- git push origin
+ git add . ; git commit -m "vas:1.0.0 수정"; git push origin
+
 ```
 
 ## argocd vas app auto sync
 - argocd 기본적으로 180초(3분) 마다 refresh가 이루어져 자동 sync 된다  
+
 
 
 
