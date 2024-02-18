@@ -13,7 +13,7 @@ cd k8s-edu/lec0/single-master
 ```bash
 
 ## root로 실행  
-export EXTERNAL_IP=43.202.56.65
+export EXTERNAL_IP=$MASTER-1_EXTERNAL_IP
 sh rke2-single-master-install.sh
 
 source ~/.bashrc

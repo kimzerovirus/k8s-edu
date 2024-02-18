@@ -1,5 +1,5 @@
 
-ARGOCD_HOST: "argocd.43.202.56.65.sslip.io"  ## argocd server host (default=argocd.127.0.0.1.sslip.io)
+ARGOCD_HOST: "argocd.$MASTER-1_EXTERNAL_IP.sslip.io"  ## argocd server host (default=argocd.127.0.0.1.sslip.io)
 ARGOCD_NEW_PASSWORD: "admin1234" 
 GIT_OPS_URL: "https://github.com/io203/demo-gitops.git"
 ARGO_APP_NAME: "vas"

@@ -107,7 +107,7 @@ curl 172.26.5.74:30001   ## worker-2
 # 클러스 외부의 Browser에서 
 # aws worker node network   방화벽 30001 번 오픈 (master-1,worker-1,worker-2)
 # worker node external-ip 로 접속 
-curl http://3.35.176.30:30001  ## master-1
+curl http://$MASTER-1_EXTERNAL_IP:30001  ## master-1
 curl http://43.201.116.156:30001 ## worker-1
 curl http://3.38.191.50:30001  ## worker-2
 

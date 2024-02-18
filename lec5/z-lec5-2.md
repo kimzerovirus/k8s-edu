@@ -448,7 +448,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: "longhorn.3.35.176.30.sslip.io"
+  - host: "longhorn.$MASTER-1_EXTERNAL_IP.sslip.io"
     http:
       paths:
       - path: /
@@ -463,7 +463,7 @@ spec:
 ```sh 
 k apply -f longhorn-ui-ing.yaml
 ```
-- UI 접속: http://longhorn.3.35.176.30.sslip.io
+- UI 접속: http://longhorn.$MASTER-1_EXTERNAL_IP.sslip.io
 
 ## 6.3  app delete 
 ```sh

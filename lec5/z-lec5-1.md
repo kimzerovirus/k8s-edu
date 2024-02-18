@@ -118,7 +118,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: "nginx.3.35.176.30.sslip.io"
+  - host: "nginx.$MASTER-1_EXTERNAL_IP.sslip.io"
     http:
       paths:
       - path: /
@@ -133,7 +133,7 @@ spec:
 
 k apply -f web1-ing.yaml -n web1
 
-curl http://nginx.3.35.176.30.sslip.io
+curl http://nginx.$MASTER-1_EXTERNAL_IP.sslip.io
 ```
 
 web2-ing.yaml
@@ -145,7 +145,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: "apache.3.35.176.30.sslip.io"
+  - host: "apache.$MASTER-1_EXTERNAL_IP.sslip.io"
     http:
       paths:
       - path: /
@@ -159,7 +159,7 @@ spec:
 ```sh
 k apply -f web2-ing.yaml -n web2
 
-curl http://apache.3.35.176.30.sslip.io
+curl http://apache.$MASTER-1_EXTERNAL_IP.sslip.io
 ```
 
 # 2. ConfigMap
@@ -227,7 +227,7 @@ spec:
 k apply -f configmap-example.yaml -n web1
 
 ## 기존 nginx ingress 사용, 변경된 index 페이지 노출 
-curl http://nginx.3.35.176.30.sslip.io/
+curl http://nginx.$MASTER-1_EXTERNAL_IP.sslip.io/
 ```
 
 # secret

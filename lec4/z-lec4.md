@@ -76,7 +76,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: "prometheus.43.202.56.65.sslip.io"
+  - host: "prometheus.$MASTER-1_EXTERNAL_IP.sslip.io"
     http:
       paths:
       - path: /
@@ -98,7 +98,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: "grafana.43.202.56.65.sslip.io"
+  - host: "grafana.$MASTER-1_EXTERNAL_IP.sslip.io"
     http:
       paths:
       - path: /
@@ -118,11 +118,11 @@ k apply -f grafana-ing.yaml
 
 ## 1.5 prometheus > status > targets 체크 
 -  prometheus ui > status
--  http://prometheus.43.202.56.65.sslip.io
+-  http://prometheus.$MASTER-1_EXTERNAL_IP.sslip.io
 -  모두 UP 상태가 되어야 한다 
   
 ## 1.6 grafana UI
-- http://grafana.43.202.56.65.sslip.io
+- http://grafana.$MASTER-1_EXTERNAL_IP.sslip.io
 - 로그인: admin/prom-operator
 - datasource 및 dashboard가 이미 설정및 설치 되어 있다 
 
@@ -169,7 +169,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: "dashboard.43.202.56.65.sslip.io"
+  - host: "dashboard.$MASTER-1_EXTERNAL_IP.sslip.io"
     http:
       paths:
       - path: /
@@ -186,7 +186,7 @@ spec:
 k apply -f dashboard-ing.yaml
 
 ```
-- dashboard 접속 : http://dashboard.43.202.56.65.sslip.io
+- dashboard 접속 : http://dashboard.$MASTER-1_EXTERNAL_IP.sslip.io
 
 ## 2.4 sidecar 어플리케이션 log 수집
 ```sh
@@ -195,7 +195,7 @@ kubectl apply -f sidecar-nginx-log.yaml
 
 ```
 - nginx ui 접속
-- http://nginx.43.202.56.65.sslip.io/
+- http://nginx.$MASTER-1_EXTERNAL_IP.sslip.io/
 - 몇번 접속을 계속 한다 
 
 ## 2.5 opensearch dashboard에서 확인 
@@ -223,7 +223,7 @@ helm install fluent-bit bitnami/fluent-bit -f fluentbit-daemonset-custom-values.
 ```
 ### 2.7.3 nginx 접속하여 로그 발생 
 - nginx ui 접속
-- http://nginx.43.202.56.65.sslip.io/
+- http://nginx.$MASTER-1_EXTERNAL_IP.sslip.io/
 - 
 ### 2.7.4 log 확인 
 - index management > Indices >  nginx-* 확인

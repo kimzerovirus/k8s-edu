@@ -10,7 +10,7 @@ spec:
   tls:
   - secretName: nginx-tls-secret
   rules:
-  - host: "nginx.43.202.54.233.sslip.io"
+  - host: "nginx.$MASTER-1_EXTERNAL_IP.sslip.io"
     http:
       paths:
       - path: /

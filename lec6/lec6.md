@@ -43,7 +43,7 @@ argocd-ingress
 kubectl apply -f argocd-ing.yaml
 ```
 ### 2.3 access argocd ui
-- https://argocd.43.202.56.65.sslip.io/
+- https://argocd.$MASTER-1_EXTERNAL_IP.sslip.io/
 - admin/mB5LvCcBW53I2I4G
 - changepassword: admin1234
 - 재로그인 
@@ -137,7 +137,7 @@ kubectl create ns vas
 - SYNC 버튼 클릭 >  SYNCRONIZE
 
 ## 7.1 vas 서비스 확인 
-- http://vas.43.202.56.65.sslip.io/
+- http://vas.$MASTER-1_EXTERNAL_IP.sslip.io/
 
 # 8. clear
 ```sh
