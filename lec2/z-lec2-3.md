@@ -18,14 +18,20 @@ cd  k8s-edu/lec2
 ```sh 
 k apply -f hpa-apache.yaml
 
-kubectl autoscale deployment php-apache --cpu-percent=50 --min=1 --max=10
-
+## hpa 생성 
+k apply -f hpa-apache-cpu.yaml
+# 명령 기반으로도 가능 
+# kubectl autoscale deployment php-apache --cpu-percent=50 --min=1 --max=10
 
 # "hpa" 또는 "horizontalpodautoscaler" 둘 다 사용 가능하다.
 kubectl get hpa
 
 # 부하 생성을 유지하면서 나머지 스텝을 수행할 수 있도록,
 # 다음의 명령을 별도의 터미널에서 실행한다.
-kubectl run -i --tty load-generator --rm --image=busybox:1.28 --restart=Never -- /bin/sh -c "while sleep 0.01; do wget -q -O- http://nginx-svc; done"
+kubectl run -i --tty load-generator --rm --image=busybox:1.28 --restart=Never -- /bin/sh -c "while sleep 0.01; do wget -q -O- http://php-apache; done"
 
+## apache pod 수가 증가한다 
+k get pod 
+
+## 부하발생이 정지 되면 한참 있다가  다시 원래  minReplicas: 1  개까지 축소 한다 
 ```
