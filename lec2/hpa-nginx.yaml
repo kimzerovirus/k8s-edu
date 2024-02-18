@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: php-apache
+  name: hpa-nginx-deploy
 spec:
   selector:
     matchLabels:
-      run: php-apache
+      app: nginx
   replicas: 1
   template:
     metadata:
       labels:
-        run: php-apache
+        app: nginx
     spec:
       containers:
-      - name: php-apache
-        image: registry.k8s.io/hpa-example
+      - name: nginx
+        image: nginx:1.17
         ports:
         - containerPort: 80
         resources:
@@ -26,11 +26,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: php-apache
-  labels:
-    run: php-apache
+  name: nginx
 spec:
+  selector:
+    app: nginx
   ports:
   - port: 80
-  selector:
-    run: php-apache
+  

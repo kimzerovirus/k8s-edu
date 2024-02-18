@@ -1,7 +1,7 @@
 apiVersion: autoscaling/v2   
 kind: HorizontalPodAutoscaler
 metadata:
-  name: apache-hpa-cpu
+  name: hpa-cpu-test
 spec:
   scaleTargetRef:        # replica수를 조정할 대상 설정 
     apiVersion: apps/v1
