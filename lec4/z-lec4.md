@@ -185,8 +185,9 @@ spec:
 k apply -f dashboard-ing.yaml
 
 ```
+- dashboard 접속 : http://dashboard.43.202.56.65.sslip.io
 
-## sidecar log 수집
+## sidecar 어플리케이션 log 수집
 ```sh
 kubectl create ns nginx
 kubectl apply -f sidecar-nginx-log.yaml
@@ -194,21 +195,23 @@ kubectl apply -f sidecar-nginx-log.yaml
 ```
 - nginx ui 접속
 - http://nginx.43.202.56.65.sslip.io/
+- 몇번 접속을 계속 한다 
 
 ## opensearch dashboard에서 확인 
 - index management > Indices >  server-nginx-log-* 확인
 - Dashboards Management > Index patterns > Create index pattern > server-nginx-log-* 설정
+- Discover 메뉴에서 로그 확인 
 
 ## clear 
 ```sh 
-kubectl delete -f exam5/sidcar-nginx-log.yaml
+kubectl delete -f sidecar-nginx-log.yaml
 ```
 
 ## cluster-level 로그 수집 
 
 ### nginx deployment
 ```bash
-kubectl apply -f exam5/nginx.yaml
+kubectl apply -f nginx.yaml
 ```
 
 ### install fluent-bit daemonset
