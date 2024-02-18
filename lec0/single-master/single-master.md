@@ -30,6 +30,9 @@ cd k8s-edu/lec0/single-master
 
 sh master-ubuntu-user-kubeconfig.sh
 source ~/.bashrc
+
+## debug
+## journalctl -u rke2-server -f
 ```
 
 ## 2.2 master token  
