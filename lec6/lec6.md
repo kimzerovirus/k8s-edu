@@ -94,10 +94,10 @@ docker push saturn203/vas:0.0.1
 cd ~
 git clone [repository-uri]
 ## ex) git clone https://github.com/io203/demo-gitops.git 
-```
-- vas-gitops 안에 exam6 > vas 폴더를 copy 한다 
-```
- cp -rf ~/k8s-edu/exam6/vas ~/demo-gitops/
+
+## lec6 > vas 폴더를 vas-gitops 안에 copy 한다 
+## vas-ing.yaml host를 변경한다 
+ cp -rf ~/k8s-edu/lec6/vas ~/demo-gitops/
  cd ~/demo-gitops
  git push origin main
 ```
