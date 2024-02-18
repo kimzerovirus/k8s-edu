@@ -16,10 +16,10 @@ cd  k8s-edu/lec2
 
 ## 어플리케이션 apache 배포
 ```sh 
-k apply -f apache.yaml
+k apply -f hpa-apache.yaml
 
 kubectl autoscale deployment php-apache --cpu-percent=50 --min=1 --max=10
-kubectl autoscale deployment hpa-nginx-deploy --cpu-percent=50 --min=1 --max=10
+
 
 # "hpa" 또는 "horizontalpodautoscaler" 둘 다 사용 가능하다.
 kubectl get hpa
