@@ -6,6 +6,7 @@
 # git clone https://github.com/io203/k8s-edu.git
 cd  k8s-edu/lec4
 ```
+
 ## 1. install helm
 ```sh
 ## install-vm에서 실행 
@@ -138,7 +139,7 @@ helm uninstall prometheus -n monitoring
 - opensearch 설치 하기 위해서 최소한 worker가 3개 필요하다 
 - worker를 하나 만들고 lec0에서 했던 agent를 추가 한다 
 
-##  opensearch는 pv가 필요하며  pv 때문에 설치(Rancher Local Path Provisioner)
+## 2.2 opensearch는 pv가 필요하며  pv 때문에 설치(Rancher Local Path Provisioner)
 ```sh
 kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/v0.0.26/deploy/local-path-storage.yaml
 
@@ -157,7 +158,7 @@ helm install opensearch bitnami/opensearch --version 0.6.1 -f opensearch-custom-
 ```
 - running 할때까지 시간이 걸림
 
-## dashboard ingress
+## 2.3 dashboard ingress
 dashboard-ing.yaml
 ```yaml
 apiVersion: networking.k8s.io/v1
@@ -187,7 +188,7 @@ k apply -f dashboard-ing.yaml
 ```
 - dashboard 접속 : http://dashboard.43.202.56.65.sslip.io
 
-## sidecar 어플리케이션 log 수집
+## 2.4 sidecar 어플리케이션 log 수집
 ```sh
 kubectl create ns nginx
 kubectl apply -f sidecar-nginx-log.yaml
@@ -197,41 +198,47 @@ kubectl apply -f sidecar-nginx-log.yaml
 - http://nginx.43.202.56.65.sslip.io/
 - 몇번 접속을 계속 한다 
 
-## opensearch dashboard에서 확인 
+## 2.5 opensearch dashboard에서 확인 
 - index management > Indices >  server-nginx-log-* 확인
 - Dashboards Management > Index patterns > Create index pattern > server-nginx-log-* 설정
 - Discover 메뉴에서 로그 확인 
 
-## clear 
+## 2.6 clear 
 ```sh 
 kubectl delete -f sidecar-nginx-log.yaml
 ```
 
-## cluster-level 로그 수집 
+## 2.7 cluster-level 로그 수집 
 
-### nginx deployment
+### 2.7.1 nginx deployment
 ```bash
 kubectl apply -f nginx.yaml
 ```
 
-### install fluent-bit daemonset
+### 2.7.2 install fluent-bit daemonset
 - fluent-bit 을 daemonset을 배포한다 
 ```sh
-helm install fluent-bit bitnami/fluent-bit -f exam5/fluentbit-daemonset-custom-values.yaml --create-namespace  --namespace monitoring
+helm install fluent-bit bitnami/fluent-bit -f fluentbit-daemonset-custom-values.yaml --create-namespace  --namespace monitoring
 
 ```
-### log 확인 
+### 2.7.3 nginx 접속하여 로그 발생 
+- nginx ui 접속
+- http://nginx.43.202.56.65.sslip.io/
+- 
+### 2.7.4 log 확인 
 - index management > Indices >  nginx-* 확인
 
-## clear 
+## 2.8 clear 
 ```sh
 helm uninstall opensearch -n monitoring
 helm uninstall fluent-bit -n monitoring
 ## pvc 를 강제적으로 삭제한다 
-kubectl get pvc -n monitoring 
+k get pvc -n monitoring 
 k delete pvc data-opensearch-data-0 -n monitoring 
 k delete pvc data-opensearch-data-1 -n monitoring 
 k delete pvc data-opensearch-master-0 -n monitoring 
 k delete pvc data-opensearch-master-1 -n monitoring 
-kubectl delete -f exam5/nginx.yaml
+k delete -f nginx.yaml
+
+
 ```

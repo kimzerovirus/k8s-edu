@@ -1,4 +1,14 @@
-# CI/CD 
+# lecture-6
+- install-vm에서 실행 
+- ubuntu유저로  실행   
+```sh
+# cd ~
+# git clone https://github.com/io203/k8s-edu.git
+cd  ~/k8s-edu/lec6
+```
+
+
+# 1. CI/CD 
 - git : github
 - image Registry: docker-hub
 - giOps: github
@@ -6,28 +16,31 @@
 - deploy: argocd
 - github/docker-hub 계정 필요 
 
-# install argo-cd 
+# 2. install argo-cd 
 ```bash
 kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 
 ## argocd password
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+# mB5LvCcBW53I2I4G
+
 ```
-## rke2 Updating Nginx Helm
+## 2.1 rke2 Updating Nginx Helm
 - rke2에 미리 설치된 rke2-ingress-nginx-controller는 enable-ssl-passthrough 에 대한 설정이 없다 
 - 다음과 같이 설정을 추가 할수 있다 
 ```bash
-kubectl apply -f exam6/rke2-ingress-nginx.yaml
+kubectl apply -f rke2-ingress-nginx.yaml
+
 ```
-- 1개씩 update 가 된다 
+- 1개씩 update 가 된다 (완료 될때 까지 기다린다)
 
 ## lightsail master 서버 443 오픈 
 - master-1 서버의 network에서 443 추가 
   
 argocd-ingress
 ```sh
-kubectl apply -f exam6/argocd-ing.yaml
+kubectl apply -f argocd-ing.yaml
 ```
 ### access argocd ui
 - https://argocd.15.165.75.251.sslip.io/
