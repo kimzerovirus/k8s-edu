@@ -17,7 +17,7 @@ cd k8s-edu/lec0/multi-master
 ```bash
 ## root로 로그인
 
-export EXTERNAL_IP=43.203.210.49
+export EXTERNAL_IP=52.79.148.106
 sh rke2-master01-install.sh
 
 source ~/.bashrc
@@ -29,7 +29,7 @@ kubectl version
 kubectl config view 
 kubectl cluster-info
 kubectl get nodes
-kubectl get pod -A
+kubectl get pod -A -o wide
 ```
 
 ## 참고: uninstall rke2
@@ -49,8 +49,7 @@ master01에서
 ```
 cat /var/lib/rancher/rke2/server/node-token
 
-K10856fb17a5ce7eb3c083c9fa5b18e7aed519245dd4e29a342ffbf79865c6feb3b::server:3a0459d3712e2b9d4e4d69b6c5f38d89
-
+K106a8ac3fff83efb196fb0a24b8de4b6c3cf5e3d62f088ffba98b617066faac854::server:daf61e0d5d9b8c806c72a9573a1b5bab
 
 ```
 
@@ -59,9 +58,9 @@ K10856fb17a5ce7eb3c083c9fa5b18e7aed519245dd4e29a342ffbf79865c6feb3b::server:3a04
 ## master-1이 어느정도 설치가 끝나고 진행 한다 
 ## root로 로그인 
 
-export EXTERNAL_IP=43.203.210.49
-export MASTER01_INTERNAL_IP=172.26.8.159
-export TOKEN=K10856fb17a5ce7eb3c083c9fa5b18e7aed519245dd4e29a342ffbf79865c6feb3b::server:3a0459d3712e2b9d4e4d69b6c5f38d89
+export EXTERNAL_IP=3.35.214.214
+export MASTER01_INTERNAL_IP=172.26.8.95
+export TOKEN=K106a8ac3fff83efb196fb0a24b8de4b6c3cf5e3d62f088ffba98b617066faac854::server:daf61e0d5d9b8c806c72a9573a1b5bab
 sh rke2-master02-03-install.sh
 
 ```
@@ -69,17 +68,17 @@ sh rke2-master02-03-install.sh
 ## 2.5 master03 설치 
 ```bash
 ## root로 로그인 
-export EXTERNAL_IP=43.203.210.49
-export MASTER01_INTERNAL_IP=172.26.8.159
-export TOKEN=K10856fb17a5ce7eb3c083c9fa5b18e7aed519245dd4e29a342ffbf79865c6feb3b::server:3a0459d3712e2b9d4e4d69b6c5f38d89
+export EXTERNAL_IP=52.79.161.255
+export MASTER01_INTERNAL_IP=172.26.8.95
+export TOKEN=K106a8ac3fff83efb196fb0a24b8de4b6c3cf5e3d62f088ffba98b617066faac854::server:daf61e0d5d9b8c806c72a9573a1b5bab
 
 sh rke2-master02-03-install.sh
 ```
 
 ## 2.6 worker(agent)
 ```sh 
-export MASTER01_INTERNAL_IP=172.26.8.159
-export TOKEN=K10856fb17a5ce7eb3c083c9fa5b18e7aed519245dd4e29a342ffbf79865c6feb3b::server:3a0459d3712e2b9d4e4d69b6c5f38d89
+export MASTER01_INTERNAL_IP=172.26.8.95
+export TOKEN=K106a8ac3fff83efb196fb0a24b8de4b6c3cf5e3d62f088ffba98b617066faac854::server:daf61e0d5d9b8c806c72a9573a1b5bab
 sh rke2-agent-install.sh
 
 ```
