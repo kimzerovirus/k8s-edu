@@ -43,9 +43,8 @@ vi ~/.ssh/authorized_keys
 ## install-vm에서 
 ## kubconfig copy
 mkdir -p ~/.kube/
-scp ubuntu@172.26.11.45:~/.kube/config ~/.kube/config
+scp ubuntu@172.26.13.104:~/.kube/config ~/.kube/config
 cat ~/.kube/config
-
 sed -i 's/127.0.0.1/172.26.11.45/g' ~/.kube/config
 cat ~/.kube/config
 
@@ -92,5 +91,21 @@ sudo vi  /etc/rancher/rke2/config.yaml
 sudo systemctl restart rke2-server.service
 
 sudo systemctl status  rke2-server.service
+```
+
+
+## ssh cofnig 
+- local에서 진행 
+
+```
+cd ~
+vi .ssh/cofnig
+----------
+Host master-1
+  HostName 3.39.238.55
+  IdentityFile /Users/blackstar/.ssh/aws/lightsail-key.pem
+  User ubuntu
+
+ssh master-1
 ```
 
